@@ -48,7 +48,7 @@ export default function Config() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="h-8 w-8 border-2 border-[#0080ff30] border-t-[#0080ff] rounded-full animate-spin" />
+        <div className="h-8 w-8 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
       </div>
     );
   }
@@ -73,7 +73,7 @@ export default function Config() {
 
       {/* Sensitive fields note */}
       <div className="flex items-start gap-3 rounded-xl p-4 border border-[#ffaa0020]" style={{ background: 'rgba(255,170,0,0.05)' }}>
-        <ShieldAlert className="h-5 w-5 text-[#ffaa00] flex-shrink-0 mt-0.5" />
+        <ShieldAlert className="h-5 w-5 text-[#ffaa00] shrink-0 mt-0.5" />
         <div>
           <p className="text-sm text-[#ffaa00] font-medium">
             Sensitive fields are masked
@@ -88,7 +88,7 @@ export default function Config() {
       {/* Success message */}
       {success && (
         <div className="flex items-center gap-2 rounded-xl p-3 border border-[#00e68a30] animate-fade-in" style={{ background: 'rgba(0,230,138,0.06)' }}>
-          <CheckCircle className="h-4 w-4 text-[#00e68a] flex-shrink-0" />
+          <CheckCircle className="h-4 w-4 text-[#00e68a] shrink-0" />
           <span className="text-sm text-[#00e68a]">{success}</span>
         </div>
       )}
@@ -96,7 +96,7 @@ export default function Config() {
       {/* Error message */}
       {error && (
         <div className="flex items-center gap-2 rounded-xl p-3 border border-[#ff446630] animate-fade-in" style={{ background: 'rgba(255,68,102,0.06)' }}>
-          <AlertTriangle className="h-4 w-4 text-[#ff4466] flex-shrink-0" />
+          <AlertTriangle className="h-4 w-4 text-[#ff4466] shrink-0" />
           <span className="text-sm text-[#ff6680]">{error}</span>
         </div>
       )}

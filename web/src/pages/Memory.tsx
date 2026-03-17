@@ -97,7 +97,7 @@ export default function Memory() {
   if (error && entries.length === 0) {
     return (
       <div className="p-6 animate-fade-in">
-        <div className="rounded-xl bg-[#ff446615] border border-[#ff446630] p-4 text-[#ff6680]">
+        <div className="rounded-xl bg-red-500/8 border-red-500/20 p-4 text-red-400">
           Failed to load memory: {error}
         </div>
       </div>
@@ -161,7 +161,7 @@ export default function Memory() {
 
       {/* Error banner (non-fatal) */}
       {error && (
-        <div className="rounded-xl bg-[#ff446615] border border-[#ff446630] p-3 text-sm text-[#ff6680] animate-fade-in">
+        <div className="rounded-xl bg-red-500/8 border-red-500/20 p-3 text-sm text-red-400 animate-fade-in">
           {error}
         </div>
       )}
@@ -177,14 +177,14 @@ export default function Memory() {
                   setShowForm(false);
                   setFormError(null);
                 }}
-                className="text-[#556080] hover:text-white transition-colors duration-300"
+                className="text-slate-500 hover:text-white transition-colors duration-300"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
             {formError && (
-              <div className="mb-4 rounded-xl bg-[#ff446615] border border-[#ff446630] p-3 text-sm text-[#ff6680] animate-fade-in">
+              <div className="mb-4 rounded-xl bg-red-500/8 border-red-500/20 p-3 text-sm text-red-400 animate-fade-in">
                 {formError}
               </div>
             )}
@@ -234,7 +234,7 @@ export default function Memory() {
                   setShowForm(false);
                   setFormError(null);
                 }}
-                className="px-4 py-2 text-sm font-medium text-[#8892a8] hover:text-white border border-[#1a1a3e] rounded-xl hover:bg-[#0080ff08] transition-all duration-300"
+                className="px-4 py-2 text-sm font-medium text-slate-400 hover:text-white border border-slate-700 rounded-xl hover:bg-blue-500/3 transition-all duration-300"
               >
                 Cancel
               </button>
@@ -253,12 +253,12 @@ export default function Memory() {
       {/* Memory Table */}
       {loading ? (
         <div className="flex items-center justify-center h-32">
-          <div className="h-8 w-8 border-2 border-[#0080ff30] border-t-[#0080ff] rounded-full animate-spin" />
+          <div className="h-8 w-8 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
         </div>
       ) : entries.length === 0 ? (
         <div className="glass-card p-8 text-center">
-          <Brain className="h-10 w-10 text-[#1a1a3e] mx-auto mb-3" />
-          <p className="text-[#556080]">No memory entries found.</p>
+          <Brain className="h-10 w-10 text-slate-700 mx-auto mb-3" />
+          <p className="text-slate-500">No memory entries found.</p>
         </div>
       ) : (
         <div className="glass-card overflow-x-auto">
@@ -294,16 +294,16 @@ export default function Memory() {
                   <td className="px-4 py-3 text-right">
                     {confirmDelete === entry.key ? (
                       <div className="flex items-center justify-end gap-2 animate-fade-in">
-                        <span className="text-xs text-[#ff4466]">Delete?</span>
+                        <span className="text-xs text-red-400">Delete?</span>
                         <button
                           onClick={() => handleDelete(entry.key)}
-                          className="text-[#ff4466] hover:text-[#ff6680] text-xs font-medium"
+                          className="text-red-400 hover:text-red-300 text-xs font-medium"
                         >
                           Yes
                         </button>
                         <button
                           onClick={() => setConfirmDelete(null)}
-                          className="text-[#556080] hover:text-white text-xs font-medium"
+                          className="text-slate-500 hover:text-white text-xs font-medium"
                         >
                           No
                         </button>
@@ -311,7 +311,7 @@ export default function Memory() {
                     ) : (
                       <button
                         onClick={() => setConfirmDelete(entry.key)}
-                        className="text-[#334060] hover:text-[#ff4466] transition-all duration-300"
+                        className="text-slate-600 hover:text-red-500 transition-all duration-300"
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>

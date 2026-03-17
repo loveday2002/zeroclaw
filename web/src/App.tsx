@@ -48,7 +48,7 @@ function PairingDialog({ onPair }: { onPair: (code: string) => Promise<void> }) 
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center" style={{ background: 'radial-gradient(ellipse at center, #0a0a20 0%, #050510 70%)' }}>
+    <div className="min-h-screen flex items-center justify-center" style={{ background: 'radial-gradient(ellipse at center, rgba(10,10,32) 0%, rgba(5,5,16) 70%)' }}>
       {/* Ambient glow */}
       <div className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] rounded-full opacity-20 pointer-events-none" style={{ background: 'radial-gradient(circle, #0080ff 0%, transparent 70%)' }} />
 
@@ -64,7 +64,7 @@ function PairingDialog({ onPair }: { onPair: (code: string) => Promise<void> }) 
             style={{ boxShadow: '0 0 30px rgba(0,128,255,0.3)' }}
           />
           <h1 className="text-2xl font-bold text-gradient-blue mb-2">ZeroClaw</h1>
-          <p className="text-[#556080] text-sm">Enter the pairing code from your terminal</p>
+          <p className="text-slate-500 text-sm">Enter the pairing code from your terminal</p>
         </div>
         <form onSubmit={handleSubmit}>
           <input
@@ -77,7 +77,7 @@ function PairingDialog({ onPair }: { onPair: (code: string) => Promise<void> }) 
             autoFocus
           />
           {error && (
-            <p className="text-[#ff4466] text-sm mb-4 text-center animate-fade-in">{error}</p>
+            <p className="text-red-400 text-sm mb-4 text-center animate-fade-in">{error}</p>
           )}
           <button
             type="submit"
@@ -118,10 +118,10 @@ function AppContent() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center" style={{ background: 'radial-gradient(ellipse at center, #0a0a20 0%, #050510 70%)' }}>
+      <div className="min-h-screen flex items-center justify-center" style={{ background: 'radial-gradient(ellipse at center, rgba(10,10,32) 0%, rgba(5,5,16) 70%)' }}>
         <div className="flex flex-col items-center gap-4 animate-fade-in">
-          <div className="h-10 w-10 border-2 border-[#0080ff30] border-t-[#0080ff] rounded-full animate-spin" />
-          <p className="text-[#556080] text-sm">Connecting...</p>
+          <div className="h-10 w-10 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
+          <p className="text-slate-500 text-sm">Connecting...</p>
         </div>
       </div>
     );

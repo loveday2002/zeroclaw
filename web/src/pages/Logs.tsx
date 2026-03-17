@@ -17,21 +17,21 @@ function formatTimestamp(ts?: string): string {
 function eventTypeBadgeColor(type: string): { classes: string; bg: string } {
   switch (type.toLowerCase()) {
     case 'error':
-      return { classes: 'text-[#ff4466] border-[#ff446630]', bg: 'rgba(255,68,102,0.06)' };
+      return { classes: 'text-red-400 border-red-500/20', bg: 'rgba(255,68,102,0.06)' };
     case 'warn':
     case 'warning':
-      return { classes: 'text-[#ffaa00] border-[#ffaa0030]', bg: 'rgba(255,170,0,0.06)' };
+      return { classes: 'text-amber-400 border-amber-500/20', bg: 'rgba(255,170,0,0.06)' };
     case 'tool_call':
     case 'tool_result':
-      return { classes: 'text-[#a855f7] border-[#a855f730]', bg: 'rgba(168,85,247,0.06)' };
+      return { classes: 'text-purple-400 border-purple-500/20', bg: 'rgba(168,85,247,0.06)' };
     case 'message':
     case 'chat':
-      return { classes: 'text-[#0080ff] border-[#0080ff30]', bg: 'rgba(0,128,255,0.06)' };
+      return { classes: 'text-blue-500 border-blue-500/20', bg: 'rgba(0,128,255,0.06)' };
     case 'health':
     case 'status':
-      return { classes: 'text-[#00e68a] border-[#00e68a30]', bg: 'rgba(0,230,138,0.06)' };
+      return { classes: 'text-emerald-400 border-emerald-500/20', bg: 'rgba(0,230,138,0.06)' };
     default:
-      return { classes: 'text-[#556080] border-[#1a1a3e]', bg: 'rgba(26,26,62,0.3)' };
+      return { classes: 'text-slate-500 border-slate-700', bg: 'rgba(26,26,62,0.3)' };
   }
 }
 
@@ -139,15 +139,14 @@ export default function Logs() {
           <h2 className="text-sm font-semibold text-white uppercase tracking-wider">Live Logs</h2>
           <div className="flex items-center gap-2 ml-2">
             <span
-              className={`inline-block h-1.5 w-1.5 rounded-full glow-dot ${
-                connected ? 'text-[#00e68a] bg-[#00e68a]' : 'text-[#ff4466] bg-[#ff4466]'
-              }`}
+              className={`inline-block h-1.5 w-1.5 rounded-full glow-dot ${connected ? 'text-emerald-400 bg-emerald-400' : 'text-red-500 bg-red-500'
+                }`}
             />
-            <span className="text-[10px] text-[#334060]">
+            <span className="text-[10px] text-slate-600">
               {connected ? 'Connected' : 'Disconnected'}
             </span>
           </div>
-          <span className="text-[10px] text-[#334060] ml-2 font-mono">
+          <span className="text-[10px] text-slate-600 ml-2 font-mono">
             {filteredEntries.length} events
           </span>
         </div>
@@ -156,11 +155,10 @@ export default function Logs() {
           {/* Pause/Resume */}
           <button
             onClick={() => setPaused(!paused)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-300 ${
-              paused
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-300 ${paused
                 ? 'text-white shadow-[0_0_15px_rgba(0,230,138,0.2)]'
                 : 'text-white shadow-[0_0_15px_rgba(255,170,0,0.2)]'
-            }`}
+              }`}
             style={{
               background: paused
                 ? 'linear-gradient(135deg, #00e68a, #00cc7a)'
@@ -194,26 +192,26 @@ export default function Logs() {
       {/* Event type filters */}
       {allTypes.length > 0 && (
         <div className="flex items-center gap-2 px-6 py-2 border-b border-[#1a1a3e]/30 overflow-x-auto" style={{ background: 'rgba(5,5,16,0.6)' }}>
-          <Filter className="h-3.5 w-3.5 text-[#334060] flex-shrink-0" />
-          <span className="text-[10px] text-[#334060] flex-shrink-0 uppercase tracking-wider">Filter:</span>
+          <Filter className="h-3.5 w-3.5 text-slate-600 shrink-0" />
+          <span className="text-[10px] text-slate-600 shrink-0 uppercase tracking-wider">Filter:</span>
           {allTypes.map((type) => (
             <label
               key={type}
-              className="flex items-center gap-1.5 cursor-pointer flex-shrink-0"
+              className="flex items-center gap-1.5 cursor-pointer shrink-0"
             >
               <input
                 type="checkbox"
                 checked={typeFilters.has(type)}
                 onChange={() => toggleTypeFilter(type)}
-                className="rounded bg-[#0a0a18] border-[#1a1a3e] text-[#0080ff] focus:ring-[#0080ff] focus:ring-offset-0 h-3 w-3"
+                className="rounded bg-slate-900 border-slate-700 text-blue-500 focus:ring-blue-500 focus:ring-offset-0 h-3 w-3"
               />
-              <span className="text-[10px] text-[#556080] capitalize">{type}</span>
+              <span className="text-[10px] text-slate-500 capitalize">{type}</span>
             </label>
           ))}
           {typeFilters.size > 0 && (
             <button
               onClick={() => setTypeFilters(new Set())}
-              className="text-[10px] text-[#0080ff] hover:text-[#00d4ff] flex-shrink-0 ml-1 transition-colors"
+              className="text-[10px] text-blue-500 hover:text-cyan-400 shrink-0 ml-1 transition-colors"
             >
               Clear
             </button>
@@ -228,8 +226,8 @@ export default function Logs() {
         className="flex-1 overflow-y-auto p-4 space-y-1.5"
       >
         {filteredEntries.length === 0 ? (
-          <div className="flex flex-col items-center justify-center h-full text-[#334060] animate-fade-in">
-            <Activity className="h-10 w-10 text-[#1a1a3e] mb-3" />
+          <div className="flex flex-col items-center justify-center h-full text-slate-600 animate-fade-in">
+            <Activity className="h-10 w-10 text-slate-700 mb-3" />
             <p className="text-sm">
               {paused
                 ? 'Log streaming is paused.'
@@ -255,19 +253,19 @@ export default function Logs() {
             return (
               <div
                 key={entry.id}
-                className="glass-card rounded-lg p-3 hover:border-[#0080ff20] transition-all duration-200"
+                className="glass-card rounded-lg p-3 hover:border-blue-500/12 transition-all duration-200"
               >
                 <div className="flex items-start gap-3">
-                  <span className="text-[10px] text-[#334060] font-mono whitespace-nowrap mt-0.5">
+                  <span className="text-[10px] text-slate-600 font-mono whitespace-nowrap mt-0.5">
                     {formatTimestamp(event.timestamp)}
                   </span>
                   <span
-                    className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold border capitalize flex-shrink-0 ${badge.classes}`}
+                    className={`inline-flex items-center px-2 py-0.5 rounded text-[10px] font-semibold border capitalize shrink-0 ${badge.classes}`}
                     style={{ background: badge.bg }}
                   >
                     {event.type}
                   </span>
-                  <p className="text-sm text-[#8892a8] break-all min-w-0">
+                  <p className="text-sm text-slate-400 break-all min-w-0">
                     {typeof detail === 'string' ? detail : JSON.stringify(detail)}
                   </p>
                 </div>

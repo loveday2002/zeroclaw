@@ -9,21 +9,21 @@ function statusBadge(status: Integration['status']) {
       return {
         icon: Check,
         label: 'Active',
-        classes: 'text-[#00e68a] border-[#00e68a30]',
+        classes: 'text-emerald-400 border-emerald-500/20',
         bg: 'rgba(0,230,138,0.06)',
       };
     case 'Available':
       return {
         icon: Zap,
         label: 'Available',
-        classes: 'text-[#0080ff] border-[#0080ff30]',
+        classes: 'text-blue-500 border-blue-500/20',
         bg: 'rgba(0,128,255,0.06)',
       };
     case 'ComingSoon':
       return {
         icon: Clock,
         label: 'Coming Soon',
-        classes: 'text-[#556080] border-[#1a1a3e]',
+        classes: 'text-slate-500 border-slate-700',
         bg: 'rgba(26,26,62,0.3)',
       };
   }
@@ -63,7 +63,7 @@ export default function Integrations() {
   if (error) {
     return (
       <div className="p-6 animate-fade-in">
-        <div className="rounded-xl bg-[#ff446615] border border-[#ff446630] p-4 text-[#ff6680]">
+        <div className="rounded-xl bg-red-500/8 border-red-500/20 p-4 text-red-400">
           Failed to load integrations: {error}
         </div>
       </div>
@@ -73,7 +73,7 @@ export default function Integrations() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="h-8 w-8 border-2 border-[#0080ff30] border-t-[#0080ff] rounded-full animate-spin" />
+        <div className="h-8 w-8 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
       </div>
     );
   }
@@ -94,11 +94,10 @@ export default function Integrations() {
           <button
             key={cat}
             onClick={() => setActiveCategory(cat)}
-            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all duration-300 capitalize ${
-              activeCategory === cat
+            className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all duration-300 capitalize ${activeCategory === cat
                 ? 'text-white shadow-[0_0_15px_rgba(0,128,255,0.2)]'
                 : 'text-[#556080] border border-[#1a1a3e] hover:text-white hover:border-[#0080ff40]'
-            }`}
+              }`}
             style={activeCategory === cat ? { background: 'linear-gradient(135deg, #0080ff, #0066cc)' } : {}}
           >
             {cat}
@@ -109,15 +108,15 @@ export default function Integrations() {
       {/* Grouped Integration Cards */}
       {Object.keys(grouped).length === 0 ? (
         <div className="glass-card p-8 text-center">
-          <Puzzle className="h-10 w-10 text-[#1a1a3e] mx-auto mb-3" />
-          <p className="text-[#556080]">No integrations found.</p>
+          <Puzzle className="h-10 w-10 text-slate-700 mx-auto mb-3" />
+          <p className="text-slate-500">No integrations found.</p>
         </div>
       ) : (
         Object.entries(grouped)
           .sort(([a], [b]) => a.localeCompare(b))
           .map(([category, items]) => (
             <div key={category}>
-              <h3 className="text-[10px] font-semibold text-[#334060] uppercase tracking-wider mb-3 capitalize">
+              <h3 className="text-[10px] font-semibold text-slate-600 uppercase tracking-wider mb-3 capitalize">
                 {category}
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 stagger-children">
@@ -134,12 +133,12 @@ export default function Integrations() {
                           <h4 className="text-sm font-semibold text-white truncate">
                             {integration.name}
                           </h4>
-                          <p className="text-sm text-[#556080] mt-1 line-clamp-2">
+                          <p className="text-sm text-slate-500 mt-1 line-clamp-2">
                             {integration.description}
                           </p>
                         </div>
                         <span
-                          className={`flex-shrink-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-semibold border ${badge.classes}`}
+                          className={`shrink-0 inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-semibold border ${badge.classes}`}
                           style={{ background: badge.bg }}
                         >
                           <BadgeIcon className="h-3 w-3" />

@@ -55,7 +55,7 @@ export default function Sidebar() {
               [
                 'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 animate-slide-in-left group',
                 isActive
-                  ? 'shadow-[0_0_15px_rgba(0,128,255,0.2)]'
+                  ? 'shadow-blue-500/20'
                   : 'hover:opacity-80',
               ].join(' ')
             }
@@ -67,10 +67,10 @@ export default function Sidebar() {
           >
             {({ isActive }) => (
               <>
-                <Icon className={`h-5 w-5 flex-shrink-0 transition-colors duration-300 ${isActive ? 'text-[#0080ff]' : 'group-hover:text-[#0080ff80]'}`} />
+                <Icon className={`h-5 w-5 shrink-0 transition-colors duration-300 ${isActive ? 'text-blue-500' : 'group-hover:text-blue-500/50'}`} />
                 <span style={{ color: isActive ? 'var(--text-primary)' : 'var(--text-muted)' }}>{t(labelKey)}</span>
                 {isActive && (
-                  <div className="ml-auto h-1.5 w-1.5 rounded-full bg-[#0080ff] glow-dot" />
+                  <div className="ml-auto h-1.5 w-1.5 rounded-full bg-blue-500 glow-dot" />
                 )}
               </>
             )}

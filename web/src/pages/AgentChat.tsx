@@ -249,9 +249,8 @@ export default function AgentChat() {
     <div className="flex h-[calc(100vh-3.5rem)]">
       {/* Session sidebar (collapsible) */}
       <div
-        className={`transition-all duration-300 overflow-hidden flex-shrink-0 ${
-          sidebarOpen ? 'w-[260px]' : 'w-0'
-        }`}
+        className={`transition-all duration-300 overflow-hidden shrink-0 ${sidebarOpen ? 'w-[260px]' : 'w-0'
+          }`}
       >
         <SessionSidebar
           sessions={sessions}
@@ -298,8 +297,8 @@ export default function AgentChat() {
 
         {/* Connection error banner */}
         {error && (
-          <div className="px-4 py-2 bg-[#ff446615] border-b border-[#ff446630] flex items-center gap-2 text-sm text-[#ff6680] animate-fade-in">
-            <AlertCircle className="h-4 w-4 flex-shrink-0" />
+          <div className="px-4 py-2 bg-red-500/8 border-red-500/20 border-b flex items-center gap-2 text-sm text-red-400 animate-fade-in">
+            <AlertCircle className="h-4 w-4 shrink-0" />
             {error}
           </div>
         )}
@@ -311,7 +310,7 @@ export default function AgentChat() {
             <div className="flex flex-col items-center justify-center h-full animate-fade-in">
               <div
                 className="h-16 w-16 rounded-2xl flex items-center justify-center mb-4 animate-float"
-                style={{ background: isDark ? 'linear-gradient(135deg, #0080ff15, #0080ff08)' : 'linear-gradient(135deg, rgba(0,128,255,0.1), rgba(0,128,255,0.05))' }}
+                style={{ background: isDark ? 'linear-gradient(135deg, rgba(0,128,255,0.08), rgba(0,128,255,0.03))' : 'linear-gradient(135deg, rgba(0,128,255,0.1), rgba(0,128,255,0.05))' }}
               >
                 <Bot className="h-8 w-8" style={{ color: 'var(--accent-blue)' }} />
               </div>
@@ -332,21 +331,20 @@ export default function AgentChat() {
           {currentMessages.map((msg, idx) => (
             <div
               key={msg.id}
-              className={`group flex items-start gap-3 ${
-                msg.role === 'user'
+              className={`group flex items-start gap-3 ${msg.role === 'user'
                   ? 'flex-row-reverse animate-slide-in-right'
                   : 'animate-slide-in-left'
-              }`}
+                }`}
               style={{ animationDelay: `${Math.min(idx * 30, 200)}ms` }}
             >
               <div
-                className="flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center"
+                className="shrink-0 w-8 h-8 rounded-xl flex items-center justify-center"
                 style={{
                   background:
                     msg.role === 'user'
                       ? 'linear-gradient(135deg, var(--accent-blue), var(--accent-blue-hover))'
                       : isDark
-                        ? 'linear-gradient(135deg, #1a1a3e, #12122a)'
+                        ? 'linear-gradient(135deg, rgba(26,26,62), rgba(18,18,42))'
                         : 'linear-gradient(135deg, rgba(200,200,220,0.3), rgba(180,180,200,0.2))',
                 }}
               >
@@ -358,9 +356,8 @@ export default function AgentChat() {
               </div>
               <div className="relative max-w-[75%]">
                 <div
-                  className={`rounded-2xl px-4 py-3 ${
-                    msg.role === 'user' ? 'text-white' : ''
-                  }`}
+                  className={`rounded-2xl px-4 py-3 ${msg.role === 'user' ? 'text-white' : ''
+                    }`}
                   style={{
                     background:
                       msg.role === 'user'
@@ -374,9 +371,8 @@ export default function AgentChat() {
                 >
                   <p className="text-sm whitespace-pre-wrap break-words">{msg.content}</p>
                   <p
-                    className={`text-[10px] mt-1.5 ${
-                      msg.role === 'user' ? 'text-white/50' : ''
-                    }`}
+                    className={`text-[10px] mt-1.5 ${msg.role === 'user' ? 'text-white/50' : ''
+                      }`}
                     style={{ color: msg.role !== 'user' ? 'var(--text-muted)' : undefined }}
                   >
                     {new Date(msg.timestamp).toLocaleTimeString()}
@@ -385,7 +381,7 @@ export default function AgentChat() {
                 <button
                   onClick={() => handleCopy(msg.id, msg.content)}
                   aria-label="Copy message"
-                  className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-all duration-300 p-1.5 rounded-lg text-[#556080] hover:text-white hover:border-[#0080ff40]"
+                  className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-all duration-300 p-1.5 rounded-lg text-slate-500 hover:text-white hover:border-blue-500/25"
                   style={{
                     background: isDark ? 'var(--bg-input)' : 'var(--bg-card)',
                     border: '1px solid var(--border-default)',
@@ -405,10 +401,10 @@ export default function AgentChat() {
           {typing && (
             <div className="flex items-start gap-3 animate-fade-in">
               <div
-                className="flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center"
+                className="shrink-0 w-8 h-8 rounded-xl flex items-center justify-center"
                 style={{
                   background: isDark
-                    ? 'linear-gradient(135deg, #1a1a3e, #12122a)'
+                    ? 'linear-gradient(135deg, rgba(26,26,62), rgba(18,18,42))'
                     : 'linear-gradient(135deg, rgba(200,200,220,0.3), rgba(180,180,200,0.2))',
                 }}
               >
@@ -454,16 +450,15 @@ export default function AgentChat() {
             <button
               onClick={handleSend}
               disabled={!connected || !input.trim()}
-              className="btn-electric flex-shrink-0 p-3 rounded-xl"
+              className="btn-electric shrink-0 p-3 rounded-xl"
             >
               <Send className="h-5 w-5" />
             </button>
           </div>
           <div className="flex items-center justify-center mt-2 gap-2">
             <span
-              className={`inline-block h-1.5 w-1.5 rounded-full glow-dot ${
-                connected ? 'text-[#00e68a] bg-[#00e68a]' : 'text-[#ff4466] bg-[#ff4466]'
-              }`}
+              className={`inline-block h-1.5 w-1.5 rounded-full glow-dot ${connected ? 'text-emerald-400 bg-emerald-400' : 'text-red-500 bg-red-500'
+                }`}
             />
             <span className="text-[10px]" style={{ color: 'var(--text-muted)' }}>
               {connected ? 'Connected' : 'Disconnected'}

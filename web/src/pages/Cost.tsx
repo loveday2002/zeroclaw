@@ -27,7 +27,7 @@ export default function Cost() {
   if (error) {
     return (
       <div className="p-6 animate-fade-in">
-        <div className="rounded-xl bg-[#ff446615] border border-[#ff446630] p-4 text-[#ff6680]">
+        <div className="rounded-xl bg-red-500/8 border-red-500/20 p-4 text-red-400">
           Failed to load cost data: {error}
         </div>
       </div>
@@ -37,7 +37,7 @@ export default function Cost() {
   if (loading || !cost) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="h-8 w-8 border-2 border-[#0080ff30] border-t-[#0080ff] rounded-full animate-spin" />
+        <div className="h-8 w-8 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
       </div>
     );
   }
@@ -49,17 +49,17 @@ export default function Cost() {
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 stagger-children">
         {[
-          { icon: DollarSign, color: '#0080ff', bg: '#0080ff15', label: 'Session Cost', value: formatUSD(cost.session_cost_usd) },
-          { icon: TrendingUp, color: '#00e68a', bg: '#00e68a15', label: 'Daily Cost', value: formatUSD(cost.daily_cost_usd) },
-          { icon: Layers, color: '#a855f7', bg: '#a855f715', label: 'Monthly Cost', value: formatUSD(cost.monthly_cost_usd) },
-          { icon: Hash, color: '#ff8800', bg: '#ff880015', label: 'Total Requests', value: cost.request_count.toLocaleString() },
+          { icon: DollarSign, color: '#0080ff', bg: 'bg-blue-500/8', label: 'Session Cost', value: formatUSD(cost.session_cost_usd) },
+          { icon: TrendingUp, color: '#00e68a', bg: 'bg-emerald-400/8', label: 'Daily Cost', value: formatUSD(cost.daily_cost_usd) },
+          { icon: Layers, color: '#a855f7', bg: 'bg-purple-500/8', label: 'Monthly Cost', value: formatUSD(cost.monthly_cost_usd) },
+          { icon: Hash, color: '#ff8800', bg: 'bg-orange-500/8', label: 'Total Requests', value: cost.request_count.toLocaleString() },
         ].map(({ icon: Icon, color, bg, label, value }) => (
           <div key={label} className="glass-card p-5 animate-slide-in-up">
             <div className="flex items-center gap-3 mb-3">
-              <div className="p-2 rounded-xl" style={{ background: bg }}>
+              <div className={`p-2 rounded-xl ${bg}`}>
                 <Icon className="h-5 w-5" style={{ color }} />
               </div>
-              <span className="text-xs text-[#556080] uppercase tracking-wider font-medium">{label}</span>
+              <span className="text-xs text-slate-500 uppercase tracking-wider font-medium">{label}</span>
             </div>
             <p className="text-2xl font-bold text-white font-mono">{value}</p>
           </div>
@@ -77,8 +77,8 @@ export default function Cost() {
             { label: 'Avg Tokens / Request', value: cost.request_count > 0 ? Math.round(cost.total_tokens / cost.request_count).toLocaleString() : '0' },
             { label: 'Cost per 1K Tokens', value: cost.total_tokens > 0 ? formatUSD((cost.monthly_cost_usd / cost.total_tokens) * 1000) : '$0.0000' },
           ].map(({ label, value }) => (
-            <div key={label} className="rounded-xl p-4" style={{ background: 'rgba(0,128,255,0.04)', border: '1px solid rgba(0,128,255,0.08)' }}>
-              <p className="text-xs text-[#556080] uppercase tracking-wider">{label}</p>
+            <div key={label} className="rounded-xl p-4 bg-blue-500/4 border-blue-500/8">
+              <p className="text-xs text-slate-500 uppercase tracking-wider">{label}</p>
               <p className="text-xl font-bold text-white mt-1 font-mono">{value}</p>
             </div>
           ))}
@@ -132,13 +132,13 @@ export default function Cost() {
                         </td>
                         <td className="px-5 py-3">
                           <div className="flex items-center gap-2">
-                            <div className="w-20 h-1.5 bg-[#0a0a18] rounded-full overflow-hidden">
+                            <div className="w-20 h-1.5 bg-slate-900 rounded-full overflow-hidden">
                               <div
                                 className="h-full rounded-full progress-bar-animated transition-all duration-700"
                                 style={{ width: `${Math.max(share, 2)}%`, background: '#0080ff' }}
                               />
                             </div>
-                            <span className="text-xs text-[#556080] w-10 text-right font-mono">
+                            <span className="text-xs text-slate-500 w-10 text-right font-mono">
                               {share.toFixed(1)}%
                             </span>
                           </div>

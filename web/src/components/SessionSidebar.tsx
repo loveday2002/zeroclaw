@@ -60,7 +60,7 @@ export default function SessionSidebar({
 
   return (
     <div
-      className="flex flex-col h-full w-[260px] flex-shrink-0 border-r"
+      className="flex flex-col h-full w-[260px] shrink-0 border-r"
       style={{
         borderColor: 'var(--border-default)',
         background: 'var(--bg-secondary)',
@@ -70,7 +70,7 @@ export default function SessionSidebar({
       <div className="p-3">
         <button
           onClick={onNewChat}
-          className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 border hover:border-[#0080ff40] hover:bg-[#0080ff10]"
+          className="w-full flex items-center justify-center gap-2 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 border hover:border-blue-500/25 hover:bg-blue-500/6"
           style={{
             borderColor: 'var(--border-default)',
             color: 'var(--text-secondary)',
@@ -91,7 +91,7 @@ export default function SessionSidebar({
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search sessions..."
-            className="w-full pl-8 pr-3 py-1.5 rounded-lg text-xs border focus:outline-none focus:border-[#0080ff40]"
+            className="w-full pl-8 pr-3 py-1.5 rounded-lg text-xs border focus:outline-none focus:border-blue-500/25"
             style={{
               background: 'var(--bg-input)',
               borderColor: 'var(--border-default)',
@@ -121,25 +121,24 @@ export default function SessionSidebar({
                 <button
                   key={session.id}
                   onClick={() => onSelectSession(session.id)}
-                  className={`group w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-left text-sm transition-all duration-200 mb-0.5 border-l-2 ${
-                    isActive
-                      ? 'text-white border-[#0080ff]'
+                  className={`group w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-left text-sm transition-all duration-200 mb-0.5 border-l-2 ${isActive
+                      ? 'text-white border-blue-500'
                       : 'hover:bg-[#1a1a3e]/40 border-transparent'
-                  }`}
+                    }`}
                   style={
                     isActive
                       ? { background: 'rgba(0,128,255,0.1)', color: 'var(--text-primary)' }
                       : { color: 'var(--text-secondary)' }
                   }
                 >
-                  <MessageSquare className="h-3.5 w-3.5 flex-shrink-0 opacity-50" />
+                  <MessageSquare className="h-3.5 w-3.5 shrink-0 opacity-50" />
                   <span className="flex-1 truncate text-xs">{session.title}</span>
                   <span
                     onClick={(e) => {
                       e.stopPropagation();
                       onDeleteSession(session.id);
                     }}
-                    className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-[#ff446620] hover:text-[#ff4466] transition-all cursor-pointer"
+                    className="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-red-500/12 hover:text-red-500 transition-all cursor-pointer"
                   >
                     <Trash2 className="h-3 w-3" />
                   </span>

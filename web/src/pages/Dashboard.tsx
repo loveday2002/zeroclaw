@@ -28,13 +28,13 @@ function healthColor(status: string): string {
   switch (status.toLowerCase()) {
     case 'ok':
     case 'healthy':
-      return 'bg-[#00e68a]';
+      return 'bg-emerald-400';
     case 'warn':
     case 'warning':
     case 'degraded':
-      return 'bg-[#ffaa00]';
+      return 'bg-amber-400';
     default:
-      return 'bg-[#ff4466]';
+      return 'bg-red-500';
   }
 }
 
@@ -42,13 +42,13 @@ function healthBorder(status: string): string {
   switch (status.toLowerCase()) {
     case 'ok':
     case 'healthy':
-      return 'border-[#00e68a30]';
+      return 'border-emerald-500/20';
     case 'warn':
     case 'warning':
     case 'degraded':
-      return 'border-[#ffaa0030]';
+      return 'border-amber-500/20';
     default:
-      return 'border-[#ff446630]';
+      return 'border-red-500/20';
   }
 }
 
@@ -79,7 +79,7 @@ export default function Dashboard() {
   if (!status || !cost) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="h-8 w-8 border-2 border-[#0080ff30] border-t-[#0080ff] rounded-full animate-spin" />
+        <div className="h-8 w-8 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
       </div>
     );
   }
@@ -91,14 +91,14 @@ export default function Dashboard() {
       {/* Status Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 stagger-children">
         {[
-          { icon: Cpu, color: '#0080ff', bg: '#0080ff15', label: 'Provider / Model', value: status.provider ?? 'Unknown', sub: status.model },
-          { icon: Clock, color: '#00e68a', bg: '#00e68a15', label: 'Uptime', value: formatUptime(status.uptime_seconds), sub: 'Since last restart' },
-          { icon: Globe, color: '#a855f7', bg: '#a855f715', label: 'Gateway Port', value: `:${status.gateway_port}`, sub: `Locale: ${status.locale}` },
-          { icon: Database, color: '#ff8800', bg: '#ff880015', label: 'Memory Backend', value: status.memory_backend, sub: `Paired: ${status.paired ? 'Yes' : 'No'}` },
+          { icon: Cpu, color: '#0080ff', bg: 'bg-blue-500/8', label: 'Provider / Model', value: status.provider ?? 'Unknown', sub: status.model },
+          { icon: Clock, color: '#00e68a', bg: 'bg-emerald-400/8', label: 'Uptime', value: formatUptime(status.uptime_seconds), sub: 'Since last restart' },
+          { icon: Globe, color: '#a855f7', bg: 'bg-purple-500/8', label: 'Gateway Port', value: `:${status.gateway_port}`, sub: `Locale: ${status.locale}` },
+          { icon: Database, color: '#ff8800', bg: 'bg-orange-500/8', label: 'Memory Backend', value: status.memory_backend, sub: `Paired: ${status.paired ? 'Yes' : 'No'}` },
         ].map(({ icon: Icon, color, bg, label, value, sub }) => (
           <div key={label} className="glass-card p-5 animate-slide-in-up">
             <div className="flex items-center gap-3 mb-3">
-              <div className="p-2 rounded-xl" style={{ background: bg }}>
+              <div className={`p-2 rounded-xl ${bg}`}>
                 <Icon className="h-5 w-5" style={{ color }} />
               </div>
               <span className="text-xs uppercase tracking-wider font-medium" style={{ color: 'var(--text-muted)' }}>{label}</span>
@@ -166,7 +166,7 @@ export default function Dashboard() {
                   <div className="flex items-center gap-2">
                     <span
                       className={`inline-block h-2 w-2 rounded-full glow-dot ${
-                        active ? 'text-[#00e68a] bg-[#00e68a]' : 'text-[#334060] bg-[#334060]'
+                        active ? 'text-emerald-400 bg-emerald-400' : 'text-slate-600 bg-slate-600'
                       }`}
                     />
                     <span className="text-xs" style={{ color: 'var(--text-muted)' }}>
