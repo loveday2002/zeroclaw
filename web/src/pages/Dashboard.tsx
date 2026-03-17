@@ -69,8 +69,8 @@ export default function Dashboard() {
   if (error) {
     return (
       <div className="p-6 animate-fade-in">
-        <div className="rounded-xl bg-[#ff446615] border border-[#ff446630] p-4 text-[#ff6680]">
-          Failed to load dashboard: {error}
+        <div className="rounded-xl" style={{ background: 'rgba(255, 68, 102, 0.1)', border: '1px solid rgba(255, 68, 102, 0.3)', padding: '1rem' }}>
+          <span style={{ color: 'var(--status-error)' }}>Failed to load dashboard: {error}</span>
         </div>
       </div>
     );
@@ -101,10 +101,10 @@ export default function Dashboard() {
               <div className="p-2 rounded-xl" style={{ background: bg }}>
                 <Icon className="h-5 w-5" style={{ color }} />
               </div>
-              <span className="text-xs text-[#556080] uppercase tracking-wider font-medium">{label}</span>
+              <span className="text-xs uppercase tracking-wider font-medium" style={{ color: 'var(--text-muted)' }}>{label}</span>
             </div>
-            <p className="text-lg font-semibold text-white truncate capitalize">{value}</p>
-            <p className="text-sm text-[#556080] truncate">{sub}</p>
+            <p className="text-lg font-semibold truncate capitalize" style={{ color: 'var(--text-primary)' }}>{value}</p>
+            <p className="text-sm truncate" style={{ color: 'var(--text-muted)' }}>{sub}</p>
           </div>
         ))}
       </div>
@@ -113,8 +113,8 @@ export default function Dashboard() {
         {/* Cost Widget */}
         <div className="glass-card p-5 animate-slide-in-up">
           <div className="flex items-center gap-2 mb-5">
-            <DollarSign className="h-5 w-5 text-[#0080ff]" />
-            <h2 className="text-sm font-semibold text-white uppercase tracking-wider">Cost Overview</h2>
+            <DollarSign className="h-5 w-5" style={{ color: '#0080ff' }} />
+            <h2 className="text-sm font-semibold uppercase tracking-wider" style={{ color: 'var(--text-primary)' }}>Cost Overview</h2>
           </div>
           <div className="space-y-4">
             {[
@@ -124,10 +124,10 @@ export default function Dashboard() {
             ].map(({ label, value, color }) => (
               <div key={label}>
                 <div className="flex justify-between text-sm mb-1.5">
-                  <span className="text-[#556080]">{label}</span>
-                  <span className="text-white font-medium font-mono">{formatUSD(value)}</span>
+                  <span style={{ color: 'var(--text-muted)' }}>{label}</span>
+                  <span className="font-medium font-mono" style={{ color: 'var(--text-primary)' }}>{formatUSD(value)}</span>
                 </div>
-                <div className="w-full h-1.5 bg-[#0a0a18] rounded-full overflow-hidden">
+                <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--bg-input)' }}>
                   <div
                     className="h-full rounded-full progress-bar-animated transition-all duration-700 ease-out"
                     style={{ width: `${Math.max((value / maxCost) * 100, 2)}%`, background: color }}
@@ -136,40 +136,40 @@ export default function Dashboard() {
               </div>
             ))}
           </div>
-          <div className="mt-5 pt-4 border-t border-[#1a1a3e]/50 flex justify-between text-sm">
-            <span className="text-[#556080]">Total Tokens</span>
-            <span className="text-white font-mono">{cost.total_tokens.toLocaleString()}</span>
+          <div className="mt-5 pt-4 border-t flex justify-between text-sm" style={{ borderColor: 'var(--border-default)' }}>
+            <span style={{ color: 'var(--text-muted)' }}>Total Tokens</span>
+            <span className="font-mono" style={{ color: 'var(--text-primary)' }}>{cost.total_tokens.toLocaleString()}</span>
           </div>
           <div className="flex justify-between text-sm mt-1">
-            <span className="text-[#556080]">Requests</span>
-            <span className="text-white font-mono">{cost.request_count.toLocaleString()}</span>
+            <span style={{ color: 'var(--text-muted)' }}>Requests</span>
+            <span className="font-mono" style={{ color: 'var(--text-primary)' }}>{cost.request_count.toLocaleString()}</span>
           </div>
         </div>
 
         {/* Active Channels */}
         <div className="glass-card p-5 animate-slide-in-up">
           <div className="flex items-center gap-2 mb-5">
-            <Radio className="h-5 w-5 text-[#0080ff]" />
-            <h2 className="text-sm font-semibold text-white uppercase tracking-wider">Active Channels</h2>
+            <Radio className="h-5 w-5" style={{ color: '#0080ff' }} />
+            <h2 className="text-sm font-semibold uppercase tracking-wider" style={{ color: 'var(--text-primary)' }}>Active Channels</h2>
           </div>
           <div className="space-y-2">
             {Object.entries(status.channels).length === 0 ? (
-              <p className="text-sm text-[#334060]">No channels configured</p>
+              <p className="text-sm" style={{ color: 'var(--text-muted)' }}>No channels configured</p>
             ) : (
               Object.entries(status.channels).map(([name, active]) => (
                 <div
                   key={name}
-                  className="flex items-center justify-between py-2.5 px-3 rounded-xl transition-all duration-300 hover:bg-[#0080ff08]"
-                  style={{ background: 'rgba(10, 10, 26, 0.5)' }}
+                  className="flex items-center justify-between py-2.5 px-3 rounded-xl transition-all duration-300 hover:opacity-80"
+                  style={{ background: 'var(--bg-input)' }}
                 >
-                  <span className="text-sm text-white capitalize font-medium">{name}</span>
+                  <span className="text-sm capitalize font-medium" style={{ color: 'var(--text-primary)' }}>{name}</span>
                   <div className="flex items-center gap-2">
                     <span
                       className={`inline-block h-2 w-2 rounded-full glow-dot ${
                         active ? 'text-[#00e68a] bg-[#00e68a]' : 'text-[#334060] bg-[#334060]'
                       }`}
                     />
-                    <span className="text-xs text-[#556080]">
+                    <span className="text-xs" style={{ color: 'var(--text-muted)' }}>
                       {active ? 'Active' : 'Inactive'}
                     </span>
                   </div>
@@ -182,28 +182,28 @@ export default function Dashboard() {
         {/* Health Grid */}
         <div className="glass-card p-5 animate-slide-in-up">
           <div className="flex items-center gap-2 mb-5">
-            <Activity className="h-5 w-5 text-[#0080ff]" />
-            <h2 className="text-sm font-semibold text-white uppercase tracking-wider">Component Health</h2>
+            <Activity className="h-5 w-5" style={{ color: '#0080ff' }} />
+            <h2 className="text-sm font-semibold uppercase tracking-wider" style={{ color: 'var(--text-primary)' }}>Component Health</h2>
           </div>
           <div className="grid grid-cols-2 gap-3">
             {Object.entries(status.health.components).length === 0 ? (
-              <p className="text-sm text-[#334060] col-span-2">No components reporting</p>
+              <p className="text-sm" style={{ color: 'var(--text-muted)' }} col-span={2}>No components reporting</p>
             ) : (
               Object.entries(status.health.components).map(([name, comp]) => (
                 <div
                   key={name}
                   className={`rounded-xl p-3 border ${healthBorder(comp.status)} transition-all duration-300 hover:scale-[1.02]`}
-                  style={{ background: 'rgba(10, 10, 26, 0.5)' }}
+                  style={{ background: 'var(--bg-input)' }}
                 >
                   <div className="flex items-center gap-2 mb-1">
                     <span className={`inline-block h-2 w-2 rounded-full ${healthColor(comp.status)} glow-dot`} />
-                    <span className="text-sm font-medium text-white capitalize truncate">
+                    <span className="text-sm font-medium capitalize truncate" style={{ color: 'var(--text-primary)' }}>
                       {name}
                     </span>
                   </div>
-                  <p className="text-xs text-[#556080] capitalize">{comp.status}</p>
+                  <p className="text-xs capitalize" style={{ color: 'var(--text-muted)' }}>{comp.status}</p>
                   {comp.restart_count > 0 && (
-                    <p className="text-xs text-[#ffaa00] mt-1">
+                    <p className="text-xs mt-1" style={{ color: 'var(--status-warning)' }}>
                       Restarts: {comp.restart_count}
                     </p>
                   )}

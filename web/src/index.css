@@ -1,11 +1,12 @@
 @import "tailwindcss";
 
 /*
- * ZeroClaw Electric Blue Theme
- * Dark-mode with electric blue accents, glassmorphism, and animations.
+ * ZeroClaw Theme - Light & Dark Mode
+ * Default: Light (white + gray), Toggle: Dark (electric blue)
  */
 
 @theme {
+  /* ===== Dark Theme (default for backward compatibility) ===== */
   --color-bg-primary: #050510;
   --color-bg-secondary: #0a0a1a;
   --color-bg-card: #0d0d20;
@@ -32,16 +33,100 @@
 
   --color-glow-blue: #0080ff40;
   --color-glow-cyan: #00d4ff30;
+
+  /* ===== Light Theme (white + gray) ===== */
+  --color-bg-primary-light: #ffffff;
+  --color-bg-secondary-light: #f8f9fa;
+  --color-bg-card-light: #ffffff;
+  --color-bg-card-hover-light: #f1f3f5;
+  --color-bg-input-light: #f8f9fa;
+
+  --color-border-default-light: #dee2e6;
+  --color-border-subtle-light: #e9ecef;
+
+  --color-accent-blue-light: #0066cc;
+  --color-accent-blue-hover-light: #0052a3;
+  --color-accent-cyan-light: #0097b8;
+  --color-accent-green-light: #00a868;
+  --color-accent-green-hover-light: #008f58;
+
+  --color-text-primary-light: #212529;
+  --color-text-secondary-light: #495057;
+  --color-text-muted-light: #868e96;
+
+  --color-status-success-light: #00a868;
+  --color-status-warning-light: #f0ad4e;
+  --color-status-error-light: #dc3545;
+  --color-status-info-light: #0066cc;
+}
+
+/* CSS Variables for theme switching */
+:root {
+  /* Default to light theme */
+  --bg-primary: var(--color-bg-primary-light);
+  --bg-secondary: var(--color-bg-secondary-light);
+  --bg-card: var(--color-bg-card-light);
+  --bg-card-hover: var(--color-bg-card-hover-light);
+  --bg-input: var(--color-bg-input-light);
+
+  --border-default: var(--color-border-default-light);
+  --border-subtle: var(--color-border-subtle-light);
+
+  --accent-blue: var(--color-accent-blue-light);
+  --accent-blue-hover: var(--color-accent-blue-hover-light);
+  --accent-cyan: var(--color-accent-cyan-light);
+  --accent-green: var(--color-accent-green-light);
+  --accent-green-hover: var(--color-accent-green-hover-light);
+
+  --text-primary: var(--color-text-primary-light);
+  --text-secondary: var(--color-text-secondary-light);
+  --text-muted: var(--color-text-muted-light);
+
+  --status-success: var(--color-status-success-light);
+  --status-warning: var(--color-status-warning-light);
+  --status-error: var(--color-status-error-light);
+  --status-info: var(--color-status-info-light);
+}
+
+/* Dark theme when [data-theme="dark"] */
+[data-theme="dark"] {
+  --bg-primary: var(--color-bg-primary);
+  --bg-secondary: var(--color-bg-secondary);
+  --bg-card: var(--color-bg-card);
+  --bg-card-hover: var(--color-bg-card-hover);
+  --bg-input: var(--color-bg-input);
+
+  --border-default: var(--color-border-default);
+  --border-subtle: var(--color-border-subtle);
+
+  --accent-blue: var(--color-accent-blue);
+  --accent-blue-hover: var(--color-accent-blue-hover);
+  --accent-cyan: var(--color-accent-cyan);
+  --accent-green: var(--color-accent-green);
+  --accent-green-hover: var(--color-accent-green-hover);
+
+  --text-primary: var(--color-text-primary);
+  --text-secondary: var(--color-text-secondary);
+  --text-muted: var(--color-text-muted);
+
+  --status-success: var(--color-status-success);
+  --status-warning: var(--color-status-warning);
+  --status-error: var(--color-status-error);
+  --status-info: var(--color-status-info);
 }
 
 /* Base styles */
 html {
+  color-scheme: light;
+}
+
+[data-theme="dark"] html {
   color-scheme: dark;
 }
 
 body {
-  background-color: var(--color-bg-primary);
-  color: var(--color-text-primary);
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
   font-family:
     "Inter",
     ui-sans-serif,
@@ -50,6 +135,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 #root {
@@ -67,31 +153,30 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1a1a3e;
+  background: var(--border-default);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #0080ff60;
+  background: var(--accent-blue);
 }
 
 /* Card utility */
 .card {
-  background: linear-gradient(135deg, rgba(13, 13, 32, 0.8), rgba(10, 10, 26, 0.6));
-  border: 1px solid rgba(0, 128, 255, 0.1);
+  background: var(--bg-card);
+  border: 1px solid var(--border-subtle);
   border-radius: 1rem;
-  backdrop-filter: blur(12px);
   transition: all 0.3s ease;
 }
 
 .card:hover {
-  border-color: rgba(0, 128, 255, 0.25);
+  border-color: var(--accent-blue);
   box-shadow: 0 0 20px rgba(0, 128, 255, 0.08);
 }
 
 /* Focus ring utility */
 *:focus-visible {
-  outline: 2px solid var(--color-accent-blue);
+  outline: 2px solid var(--accent-blue);
   outline-offset: 2px;
 }
 

@@ -28,12 +28,12 @@ const navItems = [
 
 export default function Sidebar() {
   return (
-    <aside className="fixed top-0 left-0 h-screen w-60 flex flex-col" style={{ background: 'linear-gradient(180deg, #080818 0%, #050510 100%)' }}>
+    <aside className="fixed top-0 left-0 h-screen w-60 flex flex-col" style={{ background: 'var(--bg-secondary)' }}>
       {/* Glow line on right edge */}
       <div className="sidebar-glow-line" />
 
       {/* Logo / Title */}
-      <div className="flex items-center gap-3 px-4 py-4 border-b border-[#1a1a3e]/50">
+      <div className="flex items-center gap-3 px-4 py-4 border-b" style={{ borderColor: 'var(--border-default)' }}>
         <img
           src="/_app/logo.png"
           alt="ZeroClaw"
@@ -55,19 +55,20 @@ export default function Sidebar() {
               [
                 'flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 animate-slide-in-left group',
                 isActive
-                  ? 'text-white shadow-[0_0_15px_rgba(0,128,255,0.2)]'
-                  : 'text-[#556080] hover:text-white hover:bg-[#0080ff08]',
+                  ? 'shadow-[0_0_15px_rgba(0,128,255,0.2)]'
+                  : 'hover:opacity-80',
               ].join(' ')
             }
             style={({ isActive }) => ({
               animationDelay: `${idx * 40}ms`,
+              color: isActive ? 'var(--text-primary)' : 'var(--text-muted)',
               ...(isActive ? { background: 'linear-gradient(135deg, rgba(0,128,255,0.15), rgba(0,128,255,0.05))' } : {}),
             })}
           >
             {({ isActive }) => (
               <>
                 <Icon className={`h-5 w-5 flex-shrink-0 transition-colors duration-300 ${isActive ? 'text-[#0080ff]' : 'group-hover:text-[#0080ff80]'}`} />
-                <span>{t(labelKey)}</span>
+                <span style={{ color: isActive ? 'var(--text-primary)' : 'var(--text-muted)' }}>{t(labelKey)}</span>
                 {isActive && (
                   <div className="ml-auto h-1.5 w-1.5 rounded-full bg-[#0080ff] glow-dot" />
                 )}
@@ -78,8 +79,8 @@ export default function Sidebar() {
       </nav>
 
       {/* Footer */}
-      <div className="px-5 py-4 border-t border-[#1a1a3e]/50">
-        <p className="text-[10px] text-[#334060] tracking-wider uppercase">ZeroClaw Runtime</p>
+      <div className="px-5 py-4 border-t" style={{ borderColor: 'var(--border-default)' }}>
+        <p className="text-[10px] tracking-wider uppercase" style={{ color: 'var(--text-muted)' }}>ZeroClaw Runtime</p>
       </div>
     </aside>
   );
