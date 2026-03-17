@@ -1,38 +1,81 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Send, Bot, User, AlertCircle, Copy, Check } from 'lucide-react';
+import { Send, Bot, User, AlertCircle, Copy, Check, PanelLeftClose, PanelLeft, Moon, Sun } from 'lucide-react';
 import type { WsMessage } from '@/types/api';
+import type { SessionMessage } from '@/types/session';
 import { WebSocketClient } from '@/lib/ws';
 import { generateUUID } from '@/lib/uuid';
 import { useDraft } from '@/hooks/useDraft';
-
-interface ChatMessage {
-  id: string;
-  role: 'user' | 'agent';
-  content: string;
-  timestamp: Date;
-}
+import { useSessionManager } from '@/hooks/useSessionManager';
+import SessionSidebar from '@/components/SessionSidebar';
 
 const DRAFT_KEY = 'agent-chat';
+const THEME_KEY = 'zeroclaw_theme';
 
 export default function AgentChat() {
   const { draft, saveDraft, clearDraft } = useDraft(DRAFT_KEY);
-  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const {
+    sessions,
+    activeSession,
+    activeSessionId,
+    startNewSession,
+    switchSession,
+    goHome,
+    addMessage,
+    deleteSession,
+  } = useSessionManager();
+
   const [input, setInput] = useState(draft);
   const [typing, setTyping] = useState(false);
   const [connected, setConnected] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+  const [isDark, setIsDark] = useState(true);
 
   const wsRef = useRef<WebSocketClient | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
-  const [copiedId, setCopiedId] = useState<string | null>(null);
   const pendingContentRef = useRef('');
 
-  // Persist draft to in-memory store so it survives route changes
+  // Refs to track current session ids inside WebSocket callback closures
+  const activeSessionIdRef = useRef<string | null>(null);
+  const pendingSessionIdRef = useRef<string | null>(null);
+  // Flag: when true, the next 'message'/'done' from backend is a /new response → discard it
+  const awaitingNewAckRef = useRef(false);
+
+  // Load theme preference
+  useEffect(() => {
+    const savedTheme = localStorage.getItem(THEME_KEY);
+    if (savedTheme) {
+      setIsDark(savedTheme === 'dark');
+    }
+  }, []);
+
+  // Apply theme to document
+  useEffect(() => {
+    if (isDark) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      localStorage.setItem(THEME_KEY, 'dark');
+    } else {
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.setItem(THEME_KEY, 'light');
+    }
+  }, [isDark]);
+
+  const toggleTheme = useCallback(() => {
+    setIsDark((prev) => !prev);
+  }, []);
+
+  useEffect(() => {
+    activeSessionIdRef.current = activeSessionId;
+  }, [activeSessionId]);
+
+  // Persist draft
   useEffect(() => {
     saveDraft(input);
   }, [input, saveDraft]);
 
+  // WebSocket setup — runs once on mount
   useEffect(() => {
     const ws = new WebSocketClient();
 
@@ -49,6 +92,19 @@ export default function AgentChat() {
       setError('Connection error. Attempting to reconnect...');
     };
 
+    const getTargetSessionId = (): string | null =>
+      activeSessionIdRef.current ?? pendingSessionIdRef.current;
+
+    const pushMessage = (msg: Omit<SessionMessage, 'id' | 'timestamp'>) => {
+      const targetId = getTargetSessionId();
+      if (!targetId) return;
+      addMessage(targetId, {
+        ...msg,
+        id: generateUUID(),
+        timestamp: new Date().toISOString(),
+      });
+    };
+
     ws.onMessage = (msg: WsMessage) => {
       switch (msg.type) {
         case 'chunk':
@@ -59,56 +115,42 @@ export default function AgentChat() {
         case 'message':
         case 'done': {
           const content = msg.full_response ?? msg.content ?? pendingContentRef.current;
-          if (content) {
-            setMessages((prev) => [
-              ...prev,
-              {
-                id: generateUUID(),
-                role: 'agent',
-                content,
-                timestamp: new Date(),
-              },
-            ]);
-          }
           pendingContentRef.current = '';
           setTyping(false);
+
+          // If we're waiting for the /new acknowledgment, discard this response
+          if (awaitingNewAckRef.current) {
+            awaitingNewAckRef.current = false;
+            break;
+          }
+
+          if (content) {
+            pushMessage({ role: 'agent', content });
+          }
+          pendingSessionIdRef.current = null;
           break;
         }
 
         case 'tool_call':
-          setMessages((prev) => [
-            ...prev,
-            {
-              id: generateUUID(),
-              role: 'agent',
-              content: `[Tool Call] ${msg.name ?? 'unknown'}(${JSON.stringify(msg.args ?? {})})`,
-              timestamp: new Date(),
-            },
-          ]);
+          pushMessage({
+            role: 'agent',
+            content: `[Tool Call] ${msg.name ?? 'unknown'}(${JSON.stringify(msg.args ?? {})})`,
+            toolCall: { name: msg.name ?? 'unknown', args: msg.args ?? {} },
+          });
           break;
 
         case 'tool_result':
-          setMessages((prev) => [
-            ...prev,
-            {
-              id: generateUUID(),
-              role: 'agent',
-              content: `[Tool Result] ${msg.output ?? ''}`,
-              timestamp: new Date(),
-            },
-          ]);
+          pushMessage({
+            role: 'agent',
+            content: `[Tool Result] ${msg.output ?? ''}`,
+          });
           break;
 
         case 'error':
-          setMessages((prev) => [
-            ...prev,
-            {
-              id: generateUUID(),
-              role: 'agent',
-              content: `[Error] ${msg.message ?? 'Unknown error'}`,
-              timestamp: new Date(),
-            },
-          ]);
+          pushMessage({
+            role: 'agent',
+            content: `[Error] ${msg.message ?? 'Unknown error'}`,
+          });
           setTyping(false);
           pendingContentRef.current = '';
           break;
@@ -121,26 +163,50 @@ export default function AgentChat() {
     return () => {
       ws.disconnect();
     };
+    // addMessage is stable (useCallback with stable deps)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  // Auto-scroll when messages change or typing
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, typing]);
+  }, [activeSession?.messages.length, typing]);
 
-  const handleSend = () => {
+  // ---- Send logic ----
+
+  const handleSend = useCallback(async () => {
     const trimmed = input.trim();
     if (!trimmed || !wsRef.current?.connected) return;
 
-    setMessages((prev) => [
-      ...prev,
-      {
-        id: generateUUID(),
-        role: 'user',
-        content: trimmed,
-        timestamp: new Date(),
-      },
-    ]);
+    let sessionId = activeSessionId;
 
+    // New conversation: create session + send /new to clear context window
+    if (!sessionId) {
+      sessionId = startNewSession(trimmed);
+      pendingSessionIdRef.current = sessionId;
+
+      try {
+        awaitingNewAckRef.current = true;
+        wsRef.current.sendMessage('/new');
+      } catch {
+        setError('Failed to clear context. Please try again.');
+        awaitingNewAckRef.current = false;
+        return;
+      }
+
+      // Brief delay to let backend process /new before the real message
+      await new Promise((r) => setTimeout(r, 300));
+    }
+
+    // Add user message to session store
+    addMessage(sessionId, {
+      id: generateUUID(),
+      role: 'user',
+      content: trimmed,
+      timestamp: new Date().toISOString(),
+    });
+
+    // Send to backend via WebSocket
     try {
       wsRef.current.sendMessage(trimmed);
       setTyping(true);
@@ -155,7 +221,7 @@ export default function AgentChat() {
       inputRef.current.style.height = 'auto';
       inputRef.current.focus();
     }
-  };
+  }, [input, activeSessionId, startNewSession, addMessage, clearDraft]);
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && !e.shiftKey) {
@@ -177,142 +243,232 @@ export default function AgentChat() {
     });
   }, []);
 
+  const currentMessages = activeSession?.messages ?? [];
+
   return (
-    <div className="flex flex-col h-[calc(100vh-3.5rem)]">
-      {/* Connection status bar */}
-      {error && (
-        <div className="px-4 py-2 bg-[#ff446615] border-b border-[#ff446630] flex items-center gap-2 text-sm text-[#ff6680] animate-fade-in">
-          <AlertCircle className="h-4 w-4 flex-shrink-0" />
-          {error}
-        </div>
-      )}
-
-      {/* Messages area */}
-      <div className="flex-1 overflow-y-auto p-4 space-y-4">
-        {messages.length === 0 && (
-          <div className="flex flex-col items-center justify-center h-full text-[#334060] animate-fade-in">
-            <div className="h-16 w-16 rounded-2xl flex items-center justify-center mb-4 animate-float" style={{ background: 'linear-gradient(135deg, #0080ff15, #0080ff08)' }}>
-              <Bot className="h-8 w-8 text-[#0080ff]" />
-            </div>
-            <p className="text-lg font-semibold text-white mb-1">ZeroClaw Agent</p>
-            <p className="text-sm text-[#556080]">Send a message to start the conversation</p>
-          </div>
-        )}
-
-        {messages.map((msg, idx) => (
-          <div
-            key={msg.id}
-            className={`group flex items-start gap-3 ${
-              msg.role === 'user' ? 'flex-row-reverse animate-slide-in-right' : 'animate-slide-in-left'
-            }`}
-            style={{ animationDelay: `${Math.min(idx * 30, 200)}ms` }}
-          >
-            <div
-              className={`flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center ${
-                msg.role === 'user'
-                  ? ''
-                  : ''
-              }`}
-              style={{
-                background: msg.role === 'user'
-                  ? 'linear-gradient(135deg, #0080ff, #0060cc)'
-                  : 'linear-gradient(135deg, #1a1a3e, #12122a)'
-              }}
-            >
-              {msg.role === 'user' ? (
-                <User className="h-4 w-4 text-white" />
-              ) : (
-                <Bot className="h-4 w-4 text-[#0080ff]" />
-              )}
-            </div>
-            <div className="relative max-w-[75%]">
-              <div
-                className={`rounded-2xl px-4 py-3 ${
-                  msg.role === 'user'
-                    ? 'text-white'
-                    : 'text-[#e8edf5] border border-[#1a1a3e]'
-                }`}
-                style={{
-                  background: msg.role === 'user'
-                    ? 'linear-gradient(135deg, #0080ff, #0066cc)'
-                    : 'linear-gradient(135deg, rgba(13,13,32,0.8), rgba(10,10,26,0.6))'
-                }}
-              >
-                <p className="text-sm whitespace-pre-wrap break-words">{msg.content}</p>
-                <p
-                  className={`text-[10px] mt-1.5 ${
-                    msg.role === 'user' ? 'text-white/50' : 'text-[#334060]'
-                  }`}
-                >
-                  {msg.timestamp.toLocaleTimeString()}
-                </p>
-              </div>
-              <button
-                onClick={() => handleCopy(msg.id, msg.content)}
-                aria-label="Copy message"
-                className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-all duration-300 p-1.5 rounded-lg bg-[#0a0a18] border border-[#1a1a3e] text-[#556080] hover:text-white hover:border-[#0080ff40]"
-              >
-                {copiedId === msg.id ? (
-                  <Check className="h-3 w-3 text-[#00e68a]" />
-                ) : (
-                  <Copy className="h-3 w-3" />
-                )}
-              </button>
-            </div>
-          </div>
-        ))}
-
-        {typing && (
-          <div className="flex items-start gap-3 animate-fade-in">
-            <div className="flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg, #1a1a3e, #12122a)' }}>
-              <Bot className="h-4 w-4 text-[#0080ff]" />
-            </div>
-            <div className="rounded-2xl px-4 py-3 border border-[#1a1a3e]" style={{ background: 'linear-gradient(135deg, rgba(13,13,32,0.8), rgba(10,10,26,0.6))' }}>
-              <div className="flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 bg-[#0080ff] rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                <span className="w-1.5 h-1.5 bg-[#0080ff] rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                <span className="w-1.5 h-1.5 bg-[#0080ff] rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
-              </div>
-            </div>
-          </div>
-        )}
-
-        <div ref={messagesEndRef} />
+    <div className="flex h-[calc(100vh-3.5rem)]">
+      {/* Session sidebar (collapsible) */}
+      <div
+        className={`transition-all duration-300 overflow-hidden flex-shrink-0 ${
+          sidebarOpen ? 'w-[260px]' : 'w-0'
+        }`}
+      >
+        <SessionSidebar
+          sessions={sessions}
+          activeSessionId={activeSessionId}
+          onSelectSession={switchSession}
+          onNewChat={goHome}
+          onDeleteSession={deleteSession}
+        />
       </div>
 
-      {/* Input area */}
-      <div className="border-t border-[#1a1a3e]/40 p-4" style={{ background: 'linear-gradient(180deg, rgba(8,8,24,0.9), rgba(5,5,16,0.95))' }}>
-        <div className="flex items-end gap-3 max-w-4xl mx-auto">
-          <div className="flex-1">
-            <textarea
-              ref={inputRef}
-              rows={1}
-              value={input}
-              onChange={handleTextareaChange}
-              onKeyDown={handleKeyDown}
-              placeholder={connected ? 'Type a message...' : 'Connecting...'}
-              disabled={!connected}
-              className="input-electric w-full px-4 py-3 text-sm resize-none overflow-y-auto disabled:opacity-40"
-              style={{ minHeight: '44px', maxHeight: '200px' }}
-            />
+      {/* Main chat area */}
+      <div className="flex flex-col flex-1 min-w-0">
+        {/* Top bar: sidebar toggle + session title + theme toggle */}
+        <div className="flex items-center justify-between gap-2 px-3 py-1.5 border-b" style={{ borderColor: 'var(--border-default)' }}>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="p-1.5 rounded-lg transition-all"
+              style={{ color: 'var(--text-muted)', background: 'transparent' }}
+            >
+              {sidebarOpen ? (
+                <PanelLeftClose className="h-4 w-4" />
+              ) : (
+                <PanelLeft className="h-4 w-4" />
+              )}
+            </button>
+            {activeSession && (
+              <span className="text-xs truncate" style={{ color: 'var(--text-muted)' }}>{activeSession.title}</span>
+            )}
           </div>
           <button
-            onClick={handleSend}
-            disabled={!connected || !input.trim()}
-            className="btn-electric flex-shrink-0 p-3 rounded-xl"
+            onClick={toggleTheme}
+            className="p-1.5 rounded-lg transition-all hover:scale-105"
+            style={{ color: 'var(--text-muted)', background: 'transparent' }}
+            aria-label="Toggle theme"
           >
-            <Send className="h-5 w-5" />
+            {isDark ? (
+              <Sun className="h-4 w-4" />
+            ) : (
+              <Moon className="h-4 w-4" />
+            )}
           </button>
         </div>
-        <div className="flex items-center justify-center mt-2 gap-2">
-          <span
-            className={`inline-block h-1.5 w-1.5 rounded-full glow-dot ${
-              connected ? 'text-[#00e68a] bg-[#00e68a]' : 'text-[#ff4466] bg-[#ff4466]'
-            }`}
-          />
-          <span className="text-[10px] text-[#334060]">
-            {connected ? 'Connected' : 'Disconnected'}
-          </span>
+
+        {/* Connection error banner */}
+        {error && (
+          <div className="px-4 py-2 bg-[#ff446615] border-b border-[#ff446630] flex items-center gap-2 text-sm text-[#ff6680] animate-fade-in">
+            <AlertCircle className="h-4 w-4 flex-shrink-0" />
+            {error}
+          </div>
+        )}
+
+        {/* Messages area */}
+        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+          {/* Welcome page — no active session */}
+          {!activeSession && (
+            <div className="flex flex-col items-center justify-center h-full animate-fade-in">
+              <div
+                className="h-16 w-16 rounded-2xl flex items-center justify-center mb-4 animate-float"
+                style={{ background: isDark ? 'linear-gradient(135deg, #0080ff15, #0080ff08)' : 'linear-gradient(135deg, rgba(0,128,255,0.1), rgba(0,128,255,0.05))' }}
+              >
+                <Bot className="h-8 w-8" style={{ color: 'var(--accent-blue)' }} />
+              </div>
+              <p className="text-lg font-semibold mb-1" style={{ color: 'var(--text-primary)' }}>ZeroClaw Agent</p>
+              <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Send a message to start a new conversation</p>
+            </div>
+          )}
+
+          {/* Active session with no messages yet (edge case during creation) */}
+          {activeSession && currentMessages.length === 0 && (
+            <div className="flex flex-col items-center justify-center h-full animate-fade-in">
+              <Bot className="h-8 w-8 mb-2" style={{ color: 'var(--accent-blue)' }} />
+              <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Send a message to start the conversation</p>
+            </div>
+          )}
+
+          {/* Render messages */}
+          {currentMessages.map((msg, idx) => (
+            <div
+              key={msg.id}
+              className={`group flex items-start gap-3 ${
+                msg.role === 'user'
+                  ? 'flex-row-reverse animate-slide-in-right'
+                  : 'animate-slide-in-left'
+              }`}
+              style={{ animationDelay: `${Math.min(idx * 30, 200)}ms` }}
+            >
+              <div
+                className="flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center"
+                style={{
+                  background:
+                    msg.role === 'user'
+                      ? 'linear-gradient(135deg, var(--accent-blue), var(--accent-blue-hover))'
+                      : isDark
+                        ? 'linear-gradient(135deg, #1a1a3e, #12122a)'
+                        : 'linear-gradient(135deg, rgba(200,200,220,0.3), rgba(180,180,200,0.2))',
+                }}
+              >
+                {msg.role === 'user' ? (
+                  <User className="h-4 w-4" style={{ color: msg.role === 'user' ? '#fff' : 'var(--accent-blue)' }} />
+                ) : (
+                  <Bot className="h-4 w-4" style={{ color: 'var(--accent-blue)' }} />
+                )}
+              </div>
+              <div className="relative max-w-[75%]">
+                <div
+                  className={`rounded-2xl px-4 py-3 ${
+                    msg.role === 'user' ? 'text-white' : ''
+                  }`}
+                  style={{
+                    background:
+                      msg.role === 'user'
+                        ? 'linear-gradient(135deg, var(--accent-blue), var(--accent-blue-hover))'
+                        : isDark
+                          ? 'linear-gradient(135deg, rgba(13,13,32,0.8), rgba(10,10,26,0.6))'
+                          : 'linear-gradient(135deg, rgba(255,255,255,0.9), rgba(248,249,250,0.95))',
+                    border: msg.role !== 'user' && !isDark ? '1px solid var(--border-default)' : undefined,
+                    color: msg.role !== 'user' ? 'var(--text-primary)' : undefined,
+                  }}
+                >
+                  <p className="text-sm whitespace-pre-wrap break-words">{msg.content}</p>
+                  <p
+                    className={`text-[10px] mt-1.5 ${
+                      msg.role === 'user' ? 'text-white/50' : ''
+                    }`}
+                    style={{ color: msg.role !== 'user' ? 'var(--text-muted)' : undefined }}
+                  >
+                    {new Date(msg.timestamp).toLocaleTimeString()}
+                  </p>
+                </div>
+                <button
+                  onClick={() => handleCopy(msg.id, msg.content)}
+                  aria-label="Copy message"
+                  className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-all duration-300 p-1.5 rounded-lg text-[#556080] hover:text-white hover:border-[#0080ff40]"
+                  style={{
+                    background: isDark ? 'var(--bg-input)' : 'var(--bg-card)',
+                    border: '1px solid var(--border-default)',
+                  }}
+                >
+                  {copiedId === msg.id ? (
+                    <Check className="h-3 w-3" style={{ color: 'var(--status-success)' }} />
+                  ) : (
+                    <Copy className="h-3 w-3" />
+                  )}
+                </button>
+              </div>
+            </div>
+          ))}
+
+          {/* Typing indicator */}
+          {typing && (
+            <div className="flex items-start gap-3 animate-fade-in">
+              <div
+                className="flex-shrink-0 w-8 h-8 rounded-xl flex items-center justify-center"
+                style={{
+                  background: isDark
+                    ? 'linear-gradient(135deg, #1a1a3e, #12122a)'
+                    : 'linear-gradient(135deg, rgba(200,200,220,0.3), rgba(180,180,200,0.2))',
+                }}
+              >
+                <Bot className="h-4 w-4" style={{ color: 'var(--accent-blue)' }} />
+              </div>
+              <div
+                className="rounded-2xl px-4 py-3"
+                style={{
+                  background: isDark
+                    ? 'linear-gradient(135deg, rgba(13,13,32,0.8), rgba(10,10,26,0.6))'
+                    : 'linear-gradient(135deg, rgba(255,255,255,0.9), rgba(248,249,250,0.95))',
+                  border: isDark ? '1px solid var(--border-default)' : '1px solid var(--border-default)',
+                }}
+              >
+                <div className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: 'var(--accent-blue)', animationDelay: '0ms' }} />
+                  <span className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: 'var(--accent-blue)', animationDelay: '150ms' }} />
+                  <span className="w-1.5 h-1.5 rounded-full animate-bounce" style={{ background: 'var(--accent-blue)', animationDelay: '300ms' }} />
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div ref={messagesEndRef} />
+        </div>
+
+        {/* Input area */}
+        <div className="border-t p-4" style={{ borderColor: 'var(--border-default)', background: isDark ? 'linear-gradient(180deg, rgba(8,8,24,0.9), rgba(5,5,16,0.95))' : 'var(--bg-secondary)' }}>
+          <div className="flex items-end gap-3 max-w-4xl mx-auto">
+            <div className="flex-1">
+              <textarea
+                ref={inputRef}
+                rows={1}
+                value={input}
+                onChange={handleTextareaChange}
+                onKeyDown={handleKeyDown}
+                placeholder={connected ? 'Type a message...' : 'Connecting...'}
+                disabled={!connected}
+                className="input-electric w-full px-4 py-3 text-sm resize-none overflow-y-auto disabled:opacity-40"
+                style={{ minHeight: '44px', maxHeight: '200px' }}
+              />
+            </div>
+            <button
+              onClick={handleSend}
+              disabled={!connected || !input.trim()}
+              className="btn-electric flex-shrink-0 p-3 rounded-xl"
+            >
+              <Send className="h-5 w-5" />
+            </button>
+          </div>
+          <div className="flex items-center justify-center mt-2 gap-2">
+            <span
+              className={`inline-block h-1.5 w-1.5 rounded-full glow-dot ${
+                connected ? 'text-[#00e68a] bg-[#00e68a]' : 'text-[#ff4466] bg-[#ff4466]'
+              }`}
+            />
+            <span className="text-[10px]" style={{ color: 'var(--text-muted)' }}>
+              {connected ? 'Connected' : 'Disconnected'}
+            </span>
+          </div>
         </div>
       </div>
     </div>
