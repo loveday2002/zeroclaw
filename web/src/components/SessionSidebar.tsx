@@ -17,24 +17,31 @@ function groupByDate(sessions: Session[]): { label: string; items: Session[] }[]
   const yesterdayStart = todayStart - 86_400_000;
   const weekStart = todayStart - 7 * 86_400_000;
 
-  const buckets: Record<string, Session[]> = {
-    Today: [],
-    Yesterday: [],
-    'Last 7 days': [],
-    Older: [],
-  };
+  const today: Session[] = [];
+  const yesterday: Session[] = [];
+  const last7Days: Session[] = [];
+  const older: Session[] = [];
 
   for (const s of sessions) {
     const t = new Date(s.updated_at).getTime();
-    if (t >= todayStart) buckets['Today'].push(s);
-    else if (t >= yesterdayStart) buckets['Yesterday'].push(s);
-    else if (t >= weekStart) buckets['Last 7 days'].push(s);
-    else buckets['Older'].push(s);
+    if (t >= todayStart) {
+      today.push(s);
+    } else if (t >= yesterdayStart) {
+      yesterday.push(s);
+    } else if (t >= weekStart) {
+      last7Days.push(s);
+    } else {
+      older.push(s);
+    }
   }
 
-  return Object.entries(buckets)
-    .filter(([, items]) => items.length > 0)
-    .map(([label, items]) => ({ label, items }));
+  const result: { label: string; items: Session[] }[] = [];
+  if (today.length > 0) result.push({ label: 'Today', items: today });
+  if (yesterday.length > 0) result.push({ label: 'Yesterday', items: yesterday });
+  if (last7Days.length > 0) result.push({ label: 'Last 7 days', items: last7Days });
+  if (older.length > 0) result.push({ label: 'Older', items: older });
+
+  return result;
 }
 
 export default function SessionSidebar({
