@@ -90,12 +90,12 @@ function RunHistoryPanel({ jobId }: { jobId: string }) {
   return (
     <div className="px-4 py-3">
       <div className="flex items-center justify-between mb-2">
-        <span className="text-xs font-medium text-[#8892a8]">
+        <span className="text-xs font-medium text-text-secondary">
           Recent Runs ({runs.length})
         </span>
         <button
           onClick={fetchRuns}
-          className="text-[#556080] hover:text-white transition-colors duration-300"
+          className="text-text-muted hover:text-white transition-colors duration-300"
           title="Refresh runs"
         >
           <RefreshCw className="h-3.5 w-3.5" />
@@ -124,7 +124,7 @@ function RunHistoryPanel({ jobId }: { jobId: string }) {
               <span>{formatDate(run.started_at)}</span>
             </div>
             {run.output && (
-              <pre className="mt-1.5 bg-slate-950/70 rounded p-2 text-slate-400 text-xs overflow-x-auto max-h-24 whitespace-pre-wrap break-words">
+              <pre className="mt-1.5 bg-slate-950/70 rounded p-2 text-slate-400 text-xs overflow-x-auto max-h-24 whitespace-pre-wrap wrap-break-word">
                 {run.output}
               </pre>
             )}
@@ -206,9 +206,9 @@ export default function Cron() {
         return <CheckCircle className="h-4 w-4 text-[#00e68a]" />;
       case 'error':
       case 'failed':
-        return <XCircle className="h-4 w-4 text-[#ff4466]" />;
+        return <XCircle className="h-4 w-4 text-status-error" />;
       default:
-        return <AlertCircle className="h-4 w-4 text-[#ffaa00]" />;
+        return <AlertCircle className="h-4 w-4 text-status-warning" />;
     }
   };
 
@@ -260,7 +260,7 @@ export default function Cron() {
                   setShowForm(false);
                   setFormError(null);
                 }}
-                className="text-[#556080] hover:text-white transition-colors duration-300"
+                className="text-text-muted hover:text-white transition-colors duration-300"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -274,7 +274,7 @@ export default function Cron() {
 
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-[#8892a8] mb-1.5 uppercase tracking-wider">
+                <label className="block text-xs font-semibold text-text-secondary mb-1.5 uppercase tracking-wider">
                   Name (optional)
                 </label>
                 <input
@@ -286,8 +286,8 @@ export default function Cron() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-[#8892a8] mb-1.5 uppercase tracking-wider">
-                  Schedule <span className="text-[#ff4466]">*</span>
+                <label className="block text-xs font-semibold text-text-secondary mb-1.5 uppercase tracking-wider">
+                  Schedule <span className="text-status-error">*</span>
                 </label>
                 <input
                   type="text"
@@ -298,8 +298,8 @@ export default function Cron() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-[#8892a8] mb-1.5 uppercase tracking-wider">
-                  Command <span className="text-[#ff4466]">*</span>
+                <label className="block text-xs font-semibold text-text-secondary mb-1.5 uppercase tracking-wider">
+                  Command <span className="text-status-error">*</span>
                 </label>
                 <input
                   type="text"
@@ -378,7 +378,7 @@ export default function Cron() {
                     <td className="px-4 py-3 text-white font-medium text-sm">
                       {job.name ?? '-'}
                     </td>
-                    <td className="px-4 py-3 text-slate-400 font-mono text-xs max-w-[200px] truncate">
+                    <td className="px-4 py-3 text-slate-400 font-mono text-xs max-w-50 truncate">
                       {job.command}
                     </td>
                     <td className="px-4 py-3 text-slate-500 text-xs">
@@ -394,11 +394,10 @@ export default function Cron() {
                     </td>
                     <td className="px-4 py-3">
                       <span
-                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold border ${
-                          job.enabled
-                            ? 'text-emerald-400 border-emerald-500/20'
-                            : 'text-slate-600 border-slate-700'
-                        }`}
+                        className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold border ${job.enabled
+                          ? 'text-emerald-400 border-emerald-500/20'
+                          : 'text-slate-600 border-slate-700'
+                          }`}
                         style={{ background: job.enabled ? 'rgba(0,230,138,0.06)' : 'rgba(26,26,62,0.3)' }}
                       >
                         {job.enabled ? 'Enabled' : 'Disabled'}

@@ -33,11 +33,11 @@ export default function Sidebar() {
       <div className="sidebar-glow-line" />
 
       {/* Logo / Title */}
-      <div className="flex items-center gap-3 px-4 py-4 border-b" style={{ borderColor: 'var(--border-default)' }}>
+      <div className="flex items-center gap-3 p-3 h-14 border-b" style={{ borderColor: 'var(--border-default)' }}>
         <img
           src="/_app/logo.png"
           alt="ZeroClaw"
-          className="h-10 w-10 rounded-xl object-cover animate-pulse-glow"
+          className="size-8 rounded-xl object-cover animate-pulse-glow"
         />
         <span className="text-lg font-bold text-gradient-blue tracking-wide">
           ZeroClaw

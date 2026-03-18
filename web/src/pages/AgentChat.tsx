@@ -1,15 +1,15 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { Send, Bot, User, AlertCircle, Copy, Check, PanelLeftClose, PanelLeft, Moon, Sun } from 'lucide-react';
+import { Send, Bot, User, AlertCircle, Copy, Check, PanelLeftClose, PanelLeft } from 'lucide-react';
 import type { WsMessage } from '@/types/api';
 import type { SessionMessage } from '@/types/session';
 import { WebSocketClient } from '@/lib/ws';
 import { generateUUID } from '@/lib/uuid';
 import { useDraft } from '@/hooks/useDraft';
 import { useSessionManager } from '@/hooks/useSessionManager';
+import { useTheme } from '@/hooks/useTheme';
 import SessionSidebar from '@/components/SessionSidebar';
 
 const DRAFT_KEY = 'agent-chat';
-const THEME_KEY = 'zeroclaw_theme';
 
 export default function AgentChat() {
   const { draft, saveDraft, clearDraft } = useDraft(DRAFT_KEY);
@@ -23,6 +23,7 @@ export default function AgentChat() {
     addMessage,
     deleteSession,
   } = useSessionManager();
+  const { theme } = useTheme();
 
   const [input, setInput] = useState(draft);
   const [typing, setTyping] = useState(false);
@@ -30,7 +31,6 @@ export default function AgentChat() {
   const [error, setError] = useState<string | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [isDark, setIsDark] = useState(true);
 
   const wsRef = useRef<WebSocketClient | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -43,28 +43,7 @@ export default function AgentChat() {
   // Flag: when true, the next 'message'/'done' from backend is a /new response → discard it
   const awaitingNewAckRef = useRef(false);
 
-  // Load theme preference
-  useEffect(() => {
-    const savedTheme = localStorage.getItem(THEME_KEY);
-    if (savedTheme) {
-      setIsDark(savedTheme === 'dark');
-    }
-  }, []);
-
-  // Apply theme to document
-  useEffect(() => {
-    if (isDark) {
-      document.documentElement.setAttribute('data-theme', 'dark');
-      localStorage.setItem(THEME_KEY, 'dark');
-    } else {
-      document.documentElement.removeAttribute('data-theme');
-      localStorage.setItem(THEME_KEY, 'light');
-    }
-  }, [isDark]);
-
-  const toggleTheme = useCallback(() => {
-    setIsDark((prev) => !prev);
-  }, []);
+  const isDark = theme === 'dark';
 
   useEffect(() => {
     activeSessionIdRef.current = activeSessionId;
@@ -249,7 +228,7 @@ export default function AgentChat() {
     <div className="flex h-[calc(100vh-3.5rem)]">
       {/* Session sidebar (collapsible) */}
       <div
-        className={`transition-all duration-300 overflow-hidden shrink-0 ${sidebarOpen ? 'w-[260px]' : 'w-0'
+        className={`transition-all duration-300 overflow-hidden shrink-0 ${sidebarOpen ? 'w-65' : 'w-0'
           }`}
       >
         <SessionSidebar
@@ -281,18 +260,6 @@ export default function AgentChat() {
               <span className="text-xs truncate" style={{ color: 'var(--text-muted)' }}>{activeSession.title}</span>
             )}
           </div>
-          <button
-            onClick={toggleTheme}
-            className="p-1.5 rounded-lg transition-all hover:scale-105"
-            style={{ color: 'var(--text-muted)', background: 'transparent' }}
-            aria-label="Toggle theme"
-          >
-            {isDark ? (
-              <Sun className="h-4 w-4" />
-            ) : (
-              <Moon className="h-4 w-4" />
-            )}
-          </button>
         </div>
 
         {/* Connection error banner */}
@@ -332,8 +299,8 @@ export default function AgentChat() {
             <div
               key={msg.id}
               className={`group flex items-start gap-3 ${msg.role === 'user'
-                  ? 'flex-row-reverse animate-slide-in-right'
-                  : 'animate-slide-in-left'
+                ? 'flex-row-reverse animate-slide-in-right'
+                : 'animate-slide-in-left'
                 }`}
               style={{ animationDelay: `${Math.min(idx * 30, 200)}ms` }}
             >
@@ -369,7 +336,7 @@ export default function AgentChat() {
                     color: msg.role !== 'user' ? 'var(--text-primary)' : undefined,
                   }}
                 >
-                  <p className="text-sm whitespace-pre-wrap break-words">{msg.content}</p>
+                  <p className="text-sm whitespace-pre-wrap wrap-break-word">{msg.content}</p>
                   <p
                     className={`text-[10px] mt-1.5 ${msg.role === 'user' ? 'text-white/50' : ''
                       }`}
