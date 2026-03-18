@@ -64,7 +64,7 @@ function RunHistoryPanel({ jobId }: { jobId: string }) {
           </span>
           <button
             onClick={fetchRuns}
-            className="text-slate-500 hover:text-white transition-colors duration-300"
+            className="text-text-muted hover:text-text-primary transition-colors duration-300"
           >
             <RefreshCw className="h-3.5 w-3.5" />
           </button>
@@ -79,7 +79,7 @@ function RunHistoryPanel({ jobId }: { jobId: string }) {
         <span className="text-xs text-slate-500">No runs recorded yet.</span>
         <button
           onClick={fetchRuns}
-          className="text-slate-500 hover:text-white transition-colors duration-300"
+          className="text-text-muted hover:text-text-primary transition-colors duration-300"
         >
           <RefreshCw className="h-3.5 w-3.5" />
         </button>
@@ -95,7 +95,7 @@ function RunHistoryPanel({ jobId }: { jobId: string }) {
         </span>
         <button
           onClick={fetchRuns}
-          className="text-text-muted hover:text-white transition-colors duration-300"
+          className="text-text-muted hover:text-text-primary transition-colors duration-300"
           title="Refresh runs"
         >
           <RefreshCw className="h-3.5 w-3.5" />
@@ -236,7 +236,7 @@ export default function Cron() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Clock className="h-5 w-5 text-[#0080ff]" />
-          <h2 className="text-sm font-semibold text-white uppercase tracking-wider">
+          <h2 className="text-sm font-semibold text-text-primary uppercase tracking-wider">
             Scheduled Tasks ({jobs.length})
           </h2>
         </div>
@@ -254,13 +254,13 @@ export default function Cron() {
         <div className="fixed inset-0 modal-backdrop flex items-center justify-center z-50">
           <div className="glass-card p-6 w-full max-w-md mx-4 animate-fade-in-scale">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-white">Add Cron Job</h3>
+              <h3 className="text-lg font-semibold text-text-primary">Add Cron Job</h3>
               <button
                 onClick={() => {
                   setShowForm(false);
                   setFormError(null);
                 }}
-                className="text-text-muted hover:text-white transition-colors duration-300"
+                className="text-text-muted hover:text-text-primary transition-colors duration-300"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -317,7 +317,7 @@ export default function Cron() {
                   setShowForm(false);
                   setFormError(null);
                 }}
-                className="px-4 py-2 text-sm font-medium text-slate-400 hover:text-white border border-slate-700 rounded-xl hover:bg-blue-500/3 transition-all duration-300"
+                className="px-4 py-2 text-sm font-medium text-text-muted hover:text-text-primary border border-slate-700 rounded-xl hover:bg-blue-500/3 transition-all duration-300"
               >
                 Cancel
               </button>
@@ -364,7 +364,7 @@ export default function Cron() {
                             prev === job.id ? null : job.id,
                           )
                         }
-                        className="flex items-center gap-1 text-slate-500 hover:text-white transition-colors duration-300"
+                        className="flex items-center gap-1 text-text-muted hover:text-text-primary transition-colors duration-300"
                         title="Toggle run history"
                       >
                         {expandedJob === job.id ? (
@@ -375,7 +375,7 @@ export default function Cron() {
                         {job.id.slice(0, 8)}
                       </button>
                     </td>
-                    <td className="px-4 py-3 text-white font-medium text-sm">
+                    <td className="px-4 py-3 text-text-primary font-medium text-sm">
                       {job.name ?? '-'}
                     </td>
                     <td className="px-4 py-3 text-slate-400 font-mono text-xs max-w-50 truncate">
@@ -415,7 +415,7 @@ export default function Cron() {
                           </button>
                           <button
                             onClick={() => setConfirmDelete(null)}
-                            className="text-slate-500 hover:text-white text-xs font-medium"
+                            className="text-slate-500 hover:text-text-primary text-xs font-medium"
                           >
                             No
                           </button>
@@ -423,7 +423,7 @@ export default function Cron() {
                       ) : (
                         <button
                           onClick={() => setConfirmDelete(job.id)}
-                          className="text-slate-600 hover:text-red-500 transition-all duration-300"
+                          className="text-slate-600 hover:text-status-error transition-all duration-300"
                         >
                           <Trash2 className="h-4 w-4" />
                         </button>

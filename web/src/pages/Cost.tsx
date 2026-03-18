@@ -61,14 +61,14 @@ export default function Cost() {
               </div>
               <span className="text-xs text-slate-500 uppercase tracking-wider font-medium">{label}</span>
             </div>
-            <p className="text-2xl font-bold text-white font-mono">{value}</p>
+            <p className="text-2xl font-bold text-text-primary font-mono">{value}</p>
           </div>
         ))}
       </div>
 
       {/* Token Statistics */}
       <div className="glass-card p-5 animate-slide-in-up" style={{ animationDelay: '200ms' }}>
-        <h3 className="text-sm font-semibold text-white mb-4 uppercase tracking-wider">
+        <h3 className="text-sm font-semibold text-text-primary mb-4 uppercase tracking-wider">
           Token Statistics
         </h3>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -79,7 +79,7 @@ export default function Cost() {
           ].map(({ label, value }) => (
             <div key={label} className="rounded-xl p-4 bg-blue-500/4 border-blue-500/8">
               <p className="text-xs text-slate-500 uppercase tracking-wider">{label}</p>
-              <p className="text-xl font-bold text-white mt-1 font-mono">{value}</p>
+              <p className="text-xl font-bold text-text-primary mt-1 font-mono">{value}</p>
             </div>
           ))}
         </div>
@@ -87,8 +87,8 @@ export default function Cost() {
 
       {/* Model Breakdown Table */}
       <div className="glass-card overflow-hidden animate-slide-in-up" style={{ animationDelay: '300ms' }}>
-        <div className="px-5 py-4 border-b border-[#1a1a3e]">
-          <h3 className="text-sm font-semibold text-white uppercase tracking-wider">
+        <div className="px-5 py-4 border-b border-border-default">
+          <h3 className="text-sm font-semibold text-text-primary uppercase tracking-wider">
             Model Breakdown
           </h3>
         </div>
@@ -118,16 +118,16 @@ export default function Cost() {
                         : 0;
                     return (
                       <tr key={m.model}>
-                        <td className="px-5 py-3 text-white font-medium text-sm">
+                        <td className="px-5 py-3 text-text-primary font-medium text-sm">
                           {m.model}
                         </td>
-                        <td className="px-5 py-3 text-[#8892a8] text-right font-mono text-sm">
+                        <td className="px-5 py-3 text-text-secondary text-right font-mono text-sm">
                           {formatUSD(m.cost_usd)}
                         </td>
-                        <td className="px-5 py-3 text-[#8892a8] text-right text-sm">
+                        <td className="px-5 py-3 text-text-secondary text-right text-sm">
                           {m.total_tokens.toLocaleString()}
                         </td>
-                        <td className="px-5 py-3 text-[#8892a8] text-right text-sm">
+                        <td className="px-5 py-3 text-text-secondary text-right text-sm">
                           {m.request_count.toLocaleString()}
                         </td>
                         <td className="px-5 py-3">

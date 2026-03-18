@@ -133,10 +133,10 @@ export default function Logs() {
   return (
     <div className="flex flex-col h-[calc(100vh-3.5rem)]">
       {/* Toolbar */}
-      <div className="flex items-center justify-between px-6 py-3 border-b border-[#1a1a3e]/40 animate-fade-in" style={{ background: 'linear-gradient(90deg, rgba(8,8,24,0.9), rgba(5,5,16,0.9))' }}>
+      <div className="flex items-center justify-between px-6 py-3 border-b border-border-default/40 animate-fade-in" style={{ background: 'var(--bg-secondary)' }}>
         <div className="flex items-center gap-3">
           <Activity className="h-5 w-5 text-[#0080ff]" />
-          <h2 className="text-sm font-semibold text-white uppercase tracking-wider">Live Logs</h2>
+          <h2 className="text-sm font-semibold text-text-primary uppercase tracking-wider">Live Logs</h2>
           <div className="flex items-center gap-2 ml-2">
             <span
               className={`inline-block h-1.5 w-1.5 rounded-full glow-dot ${connected ? 'text-emerald-400 bg-emerald-400' : 'text-red-500 bg-red-500'
@@ -156,8 +156,8 @@ export default function Logs() {
           <button
             onClick={() => setPaused(!paused)}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-300 ${paused
-                ? 'text-white shadow-[0_0_15px_rgba(0,230,138,0.2)]'
-                : 'text-white shadow-[0_0_15px_rgba(255,170,0,0.2)]'
+              ? 'text-text-primary shadow-[0_0_15px_rgba(0,230,138,0.2)]'
+              : 'text-text-primary shadow-[0_0_15px_rgba(255,170,0,0.2)]'
               }`}
             style={{
               background: paused
@@ -191,7 +191,7 @@ export default function Logs() {
 
       {/* Event type filters */}
       {allTypes.length > 0 && (
-        <div className="flex items-center gap-2 px-6 py-2 border-b border-[#1a1a3e]/30 overflow-x-auto" style={{ background: 'rgba(5,5,16,0.6)' }}>
+        <div className="flex items-center gap-2 px-6 py-2 border-b border-border-default/30 overflow-x-auto" style={{ background: 'var(--bg-input)' }}>
           <Filter className="h-3.5 w-3.5 text-slate-600 shrink-0" />
           <span className="text-[10px] text-slate-600 shrink-0 uppercase tracking-wider">Filter:</span>
           {allTypes.map((type) => (

@@ -323,7 +323,7 @@ export default function AgentChat() {
               </div>
               <div className="relative max-w-[75%]">
                 <div
-                  className={`rounded-2xl px-4 py-3 ${msg.role === 'user' ? 'text-white' : ''
+                  className={`rounded-2xl px-4 py-3 ${msg.role === 'user' ? 'text-text-primary' : ''
                     }`}
                   style={{
                     background:
@@ -338,7 +338,7 @@ export default function AgentChat() {
                 >
                   <p className="text-sm whitespace-pre-wrap wrap-break-word">{msg.content}</p>
                   <p
-                    className={`text-[10px] mt-1.5 ${msg.role === 'user' ? 'text-white/50' : ''
+                    className={`text-[10px] mt-1.5 ${msg.role === 'user' ? 'text-text-primary/50' : ''
                       }`}
                     style={{ color: msg.role !== 'user' ? 'var(--text-muted)' : undefined }}
                   >
@@ -348,7 +348,7 @@ export default function AgentChat() {
                 <button
                   onClick={() => handleCopy(msg.id, msg.content)}
                   aria-label="Copy message"
-                  className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-all duration-300 p-1.5 rounded-lg text-slate-500 hover:text-white hover:border-blue-500/25"
+                  className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-all duration-300 p-1.5 rounded-lg text-slate-500 hover:text-text-primary hover:border-blue-500/25"
                   style={{
                     background: isDark ? 'var(--bg-input)' : 'var(--bg-card)',
                     border: '1px solid var(--border-default)',

@@ -83,7 +83,7 @@ export default function Integrations() {
       {/* Header */}
       <div className="flex items-center gap-2">
         <Puzzle className="h-5 w-5 text-[#0080ff]" />
-        <h2 className="text-sm font-semibold text-white uppercase tracking-wider">
+        <h2 className="text-sm font-semibold text-text-primary uppercase tracking-wider">
           Integrations ({integrations.length})
         </h2>
       </div>
@@ -95,8 +95,8 @@ export default function Integrations() {
             key={cat}
             onClick={() => setActiveCategory(cat)}
             className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all duration-300 capitalize ${activeCategory === cat
-                ? 'text-white shadow-[0_0_15px_rgba(0,128,255,0.2)]'
-                : 'text-[#556080] border border-[#1a1a3e] hover:text-white hover:border-[#0080ff40]'
+              ? 'text-text-primary shadow-[0_0_15px_rgba(0,128,255,0.2)]'
+              : 'text-text-muted border border-border-default hover:text-text-primary hover:border-glow-blue'
               }`}
             style={activeCategory === cat ? { background: 'linear-gradient(135deg, #0080ff, #0066cc)' } : {}}
           >
@@ -116,7 +116,7 @@ export default function Integrations() {
           .sort(([a], [b]) => a.localeCompare(b))
           .map(([category, items]) => (
             <div key={category}>
-              <h3 className="text-[10px] font-semibold text-slate-600 uppercase tracking-wider mb-3 capitalize">
+              <h3 className="text-[10px] font-semibold text-slate-600 tracking-wider mb-3 capitalize">
                 {category}
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4 stagger-children">
@@ -130,7 +130,7 @@ export default function Integrations() {
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">
-                          <h4 className="text-sm font-semibold text-white truncate">
+                          <h4 className="text-sm font-semibold text-text-primary truncate">
                             {integration.name}
                           </h4>
                           <p className="text-sm text-slate-500 mt-1 line-clamp-2">

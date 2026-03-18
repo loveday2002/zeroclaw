@@ -157,6 +157,17 @@ async fn handle_socket(socket: WebSocket, state: AppState, _session_id: Option<S
             continue;
         }
 
+        // Handle /new command to clear conversation history
+        if content == "/new" {
+            agent.clear_history();
+            let done = serde_json::json!({
+                "type": "done",
+                "full_response": "The conversation has been cleared. Please start a new conversation.",
+            });
+            let _ = sender.send(Message::Text(done.to_string().into())).await;
+            continue;
+        }
+
         // Process message with the LLM provider
         let provider_label = state
             .config

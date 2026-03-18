@@ -59,7 +59,7 @@ export default function Config() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Settings className="h-5 w-5 text-[#0080ff]" />
-          <h2 className="text-sm font-semibold text-white uppercase tracking-wider">Configuration</h2>
+          <h2 className="text-sm font-semibold text-text-primary uppercase tracking-wider">Configuration</h2>
         </div>
         <button
           onClick={handleSave}
@@ -72,13 +72,13 @@ export default function Config() {
       </div>
 
       {/* Sensitive fields note */}
-      <div className="flex items-start gap-3 rounded-xl p-4 border border-[#ffaa0020]" style={{ background: 'rgba(255,170,0,0.05)' }}>
-        <ShieldAlert className="h-5 w-5 text-[#ffaa00] shrink-0 mt-0.5" />
+      <div className="flex items-start gap-3 rounded-xl p-4 border border-status-warning/20" style={{ background: 'rgba(255,170,0,0.05)' }}>
+        <ShieldAlert className="h-5 w-5 text-status-warning shrink-0 mt-0.5" />
         <div>
-          <p className="text-sm text-[#ffaa00] font-medium">
+          <p className="text-sm text-status-warning font-medium">
             Sensitive fields are masked
           </p>
-          <p className="text-sm text-[#ffaa0080] mt-0.5">
+          <p className="text-sm text-status-warning/50 mt-0.5">
             API keys, tokens, and passwords are hidden for security. To update a
             masked field, replace the entire masked value with your new value.
           </p>
@@ -87,7 +87,7 @@ export default function Config() {
 
       {/* Success message */}
       {success && (
-        <div className="flex items-center gap-2 rounded-xl p-3 border border-[#00e68a30] animate-fade-in" style={{ background: 'rgba(0,230,138,0.06)' }}>
+        <div className="flex items-center gap-2 rounded-xl p-3 border border-status-success/30 animate-fade-in" style={{ background: 'rgba(0,230,138,0.06)' }}>
           <CheckCircle className="h-4 w-4 text-[#00e68a] shrink-0" />
           <span className="text-sm text-[#00e68a]">{success}</span>
         </div>
@@ -95,19 +95,19 @@ export default function Config() {
 
       {/* Error message */}
       {error && (
-        <div className="flex items-center gap-2 rounded-xl p-3 border border-[#ff446630] animate-fade-in" style={{ background: 'rgba(255,68,102,0.06)' }}>
-          <AlertTriangle className="h-4 w-4 text-[#ff4466] shrink-0" />
-          <span className="text-sm text-[#ff6680]">{error}</span>
+        <div className="flex items-center gap-2 rounded-xl p-3 border border-status-error/30 animate-fade-in" style={{ background: 'rgba(255,68,102,0.06)' }}>
+          <AlertTriangle className="h-4 w-4 text-status-error shrink-0" />
+          <span className="text-sm text-status-error">{error}</span>
         </div>
       )}
 
       {/* Config Editor */}
       <div className="glass-card overflow-hidden">
-        <div className="flex items-center justify-between px-4 py-2.5 border-b border-[#1a1a3e]" style={{ background: 'rgba(0,128,255,0.03)' }}>
-          <span className="text-[10px] text-[#334060] font-semibold uppercase tracking-wider">
+        <div className="flex items-center justify-between px-4 py-2.5 border-b border-border-default" style={{ background: 'rgba(0,128,255,0.03)' }}>
+          <span className="text-[10px] text-text-muted font-semibold uppercase tracking-wider">
             TOML Configuration
           </span>
-          <span className="text-[10px] text-[#334060]">
+          <span className="text-[10px] text-text-muted">
             {config.split('\n').length} lines
           </span>
         </div>
@@ -115,8 +115,8 @@ export default function Config() {
           value={config}
           onChange={(e) => setConfig(e.target.value)}
           spellCheck={false}
-          className="w-full min-h-[500px] text-[#8892a8] font-mono text-sm p-4 resize-y focus:outline-none focus:ring-2 focus:ring-[#0080ff40] focus:ring-inset"
-          style={{ background: 'rgba(5,5,16,0.8)', tabSize: 4 }}
+          className="w-full min-h-125 text-text-secondary font-mono text-sm p-4 resize-y focus:outline-none focus:ring-2 focus:ring-glow-blue focus:ring-inset"
+          style={{ background: 'var(--bg-input)', tabSize: 4 }}
         />
       </div>
     </div>

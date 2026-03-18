@@ -287,10 +287,20 @@ body {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+[data-theme="light"] .glass-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.85), rgba(248, 249, 250, 0.6));
+  border: 1px solid rgba(0, 102, 204, 0.15);
+}
+
 .glass-card:hover {
   border-color: rgba(0, 128, 255, 0.3);
   box-shadow: 0 4px 30px rgba(0, 128, 255, 0.1), 0 0 0 1px rgba(0, 128, 255, 0.05);
   transform: translateY(-1px);
+}
+
+[data-theme="light"] .glass-card:hover {
+  border-color: rgba(0, 102, 204, 0.35);
+  box-shadow: 0 4px 30px rgba(0, 102, 204, 0.12), 0 0 0 1px rgba(0, 102, 204, 0.08);
 }
 
 /* Electric button */
@@ -338,8 +348,14 @@ body {
   background: rgba(10, 10, 26, 0.8);
   border: 1px solid rgba(0, 128, 255, 0.15);
   border-radius: 0.75rem;
-  color: var(--color-text-primary);
+  color: var(--text-primary);
   transition: all 0.3s ease;
+}
+
+[data-theme="light"] .input-electric {
+  background: rgba(248, 249, 250, 0.8);
+  border: 1px solid rgba(0, 102, 204, 0.2);
+  color: var(--text-primary);
 }
 
 .input-electric:focus {
@@ -348,8 +364,13 @@ body {
   box-shadow: 0 0 0 3px rgba(0, 128, 255, 0.15), 0 0 20px rgba(0, 128, 255, 0.1);
 }
 
+[data-theme="light"] .input-electric:focus {
+  border-color: rgba(0, 102, 204, 0.5);
+  box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.15), 0 0 20px rgba(0, 102, 204, 0.1);
+}
+
 .input-electric::placeholder {
-  color: var(--color-text-muted);
+  color: var(--text-muted);
 }
 
 /* Progress bar animation */
@@ -379,8 +400,12 @@ body {
   border-bottom: 1px solid rgba(0, 128, 255, 0.1);
 }
 
+[data-theme="light"] .table-electric thead tr {
+  border-bottom: 1px solid rgba(0, 102, 204, 0.15);
+}
+
 .table-electric thead th {
-  color: var(--color-text-muted);
+  color: var(--text-muted);
   font-weight: 500;
   font-size: 0.75rem;
   text-transform: uppercase;
@@ -393,14 +418,26 @@ body {
   transition: all 0.2s ease;
 }
 
+[data-theme="light"] .table-electric tbody tr {
+  border-bottom: 1px solid rgba(222, 226, 230, 0.5);
+}
+
 .table-electric tbody tr:hover {
   background: rgba(0, 128, 255, 0.04);
+}
+
+[data-theme="light"] .table-electric tbody tr:hover {
+  background: rgba(0, 102, 204, 0.06);
 }
 
 /* Modal backdrop */
 .modal-backdrop {
   background: rgba(5, 5, 16, 0.8);
   backdrop-filter: blur(8px);
+}
+
+[data-theme="light"] .modal-backdrop {
+  background: rgba(5, 5, 16, 0.4);
 }
 
 /* Sidebar glow line */
@@ -411,4 +448,8 @@ body {
   bottom: 0;
   width: 1px;
   background: linear-gradient(180deg, transparent, rgba(0, 128, 255, 0.3), transparent);
+}
+
+[data-theme="light"] .sidebar-glow-line {
+  background: linear-gradient(180deg, transparent, rgba(0, 102, 204, 0.25), transparent);
 }

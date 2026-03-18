@@ -76,7 +76,7 @@ export default function Tools() {
       <div>
         <div className="flex items-center gap-2 mb-4">
           <Wrench className="h-5 w-5 text-blue-500" />
-          <h2 className="text-sm font-semibold text-white uppercase tracking-wider">
+          <h2 className="text-sm font-semibold text-text-primary uppercase tracking-wider">
             Agent Tools ({filtered.length})
           </h2>
         </div>
@@ -101,7 +101,7 @@ export default function Tools() {
                     <div className="flex items-start justify-between gap-2">
                       <div className="flex items-center gap-2 min-w-0">
                         <Package className="h-4 w-4 text-blue-500 shrink-0 mt-0.5" />
-                        <h3 className="text-sm font-semibold text-white truncate">
+                        <h3 className="text-sm font-semibold text-text-primary truncate">
                           {tool.name}
                         </h3>
                       </div>
@@ -121,7 +121,7 @@ export default function Tools() {
                       <p className="text-[10px] text-slate-600 mb-2 font-semibold uppercase tracking-wider">
                         Parameter Schema
                       </p>
-                      <pre className="text-xs text-slate-400 rounded-xl p-3 overflow-x-auto max-h-64 overflow-y-auto" style={{ background: 'rgba(5,5,16,0.8)' }}>
+                      <pre className="text-xs text-text-secondary rounded-xl p-3 overflow-x-auto max-h-64 overflow-y-auto" style={{ background: 'var(--bg-input)' }}>
                         {JSON.stringify(tool.parameters, null, 2)}
                       </pre>
                     </div>
@@ -138,7 +138,7 @@ export default function Tools() {
         <div className="animate-slide-in-up" style={{ animationDelay: '200ms' }}>
           <div className="flex items-center gap-2 mb-4">
             <Terminal className="h-5 w-5 text-emerald-400" />
-            <h2 className="text-sm font-semibold text-white uppercase tracking-wider">
+            <h2 className="text-sm font-semibold text-text-primary uppercase tracking-wider">
               CLI Tools ({filteredCli.length})
             </h2>
           </div>
@@ -156,17 +156,17 @@ export default function Tools() {
               <tbody>
                 {filteredCli.map((tool) => (
                   <tr key={tool.name}>
-                    <td className="px-4 py-3 text-white font-medium text-sm">
+                    <td className="px-4 py-3 text-text-primary font-medium text-sm">
                       {tool.name}
                     </td>
-                    <td className="px-4 py-3 text-slate-500 font-mono text-xs truncate max-w-[200px]">
+                    <td className="px-4 py-3 text-slate-500 font-mono text-xs truncate max-w-50">
                       {tool.path}
                     </td>
                     <td className="px-4 py-3 text-slate-500 text-sm">
                       {tool.version ?? '-'}
                     </td>
                     <td className="px-4 py-3">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold capitalize border border-slate-700 text-slate-400" style={{ background: 'rgba(0,128,255,0.06)' }}>
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold capitalize border border-slate-700 text-slate-400" style={{ background: 'var(--bg-input)' }}>
                         {tool.category}
                       </span>
                     </td>

@@ -122,7 +122,7 @@ export default function SessionSidebar({
                   key={session.id}
                   onClick={() => onSelectSession(session.id)}
                   className={`group w-full flex items-center gap-2 px-2.5 py-2 rounded-lg text-left text-sm transition-all duration-200 mb-0.5 border-l-2 ${isActive
-                      ? 'text-white border-blue-500'
+                      ? 'text-text-primary border-blue-500'
                       : 'hover:bg-[#1a1a3e]/40 border-transparent'
                     }`}
                   style={
