@@ -103,7 +103,7 @@ export default function Dashboard() {
               </div>
               <span className="text-xs uppercase tracking-wider font-medium text-text-muted">{label}</span>
             </div>
-            <p className="text-lg font-semibold truncate capitalize text-text-primary">{value}</p>
+            <p className="text-lg font-semibold truncate capitalize">{value}</p>
             <p className="text-sm truncate text-text-muted">{sub}</p>
           </div>
         ))}
@@ -114,7 +114,7 @@ export default function Dashboard() {
         <div className="glass-card p-5 animate-slide-in-up">
           <div className="flex items-center gap-2 mb-5">
             <DollarSign className="h-5 w-5 text-[#0080ff]" />
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-text-primary">Cost Overview</h2>
+            <h2 className="text-sm font-semibold uppercase tracking-wider">Cost Overview</h2>
           </div>
           <div className="space-y-4">
             {[
@@ -125,7 +125,7 @@ export default function Dashboard() {
               <div key={label}>
                 <div className="flex justify-between text-sm mb-1.5">
                   <span className="text-text-muted">{label}</span>
-                  <span className="font-medium font-mono text-text-primary">{formatUSD(value)}</span>
+                  <span className="font-medium font-mono">{formatUSD(value)}</span>
                 </div>
                 <div className="w-full h-1.5 rounded-full overflow-hidden bg-[var(--bg-input)]">
                   <div
@@ -138,11 +138,11 @@ export default function Dashboard() {
           </div>
           <div className="mt-5 pt-4 border-t flex justify-between text-sm border-[var(--border-default)]">
             <span className="text-text-muted">Total Tokens</span>
-            <span className="font-mono text-text-primary">{cost.total_tokens.toLocaleString()}</span>
+            <span className="font-mono">{cost.total_tokens.toLocaleString()}</span>
           </div>
           <div className="flex justify-between text-sm mt-1">
             <span className="text-text-muted">Requests</span>
-            <span className="font-mono text-text-primary">{cost.request_count.toLocaleString()}</span>
+            <span className="font-mono">{cost.request_count.toLocaleString()}</span>
           </div>
         </div>
 
@@ -150,7 +150,7 @@ export default function Dashboard() {
         <div className="glass-card p-5 animate-slide-in-up">
           <div className="flex items-center gap-2 mb-5">
             <Radio className="h-5 w-5 text-[#0080ff]" />
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-text-primary">Active Channels</h2>
+            <h2 className="text-sm font-semibold uppercase tracking-wider">Active Channels</h2>
           </div>
           <div className="space-y-2">
             {Object.entries(status.channels).length === 0 ? (
@@ -161,12 +161,11 @@ export default function Dashboard() {
                   key={name}
                   className="flex items-center justify-between py-2.5 px-3 rounded-xl transition-all duration-300 hover:opacity-80 bg-[var(--bg-input)]"
                 >
-                  <span className="text-sm capitalize font-medium text-text-primary">{name}</span>
+                  <span className="text-sm capitalize font-medium">{name}</span>
                   <div className="flex items-center gap-2">
                     <span
-                      className={`inline-block h-2 w-2 rounded-full glow-dot ${
-                        active ? 'text-emerald-400 bg-emerald-400' : 'text-slate-600 bg-slate-600'
-                      }`}
+                      className={`inline-block h-2 w-2 rounded-full glow-dot ${active ? 'text-emerald-400 bg-emerald-400' : 'text-slate-600 bg-slate-600'
+                        }`}
                     />
                     <span className="text-xs text-text-muted">
                       {active ? 'Active' : 'Inactive'}
@@ -182,7 +181,7 @@ export default function Dashboard() {
         <div className="glass-card p-5 animate-slide-in-up">
           <div className="flex items-center gap-2 mb-5">
             <Activity className="h-5 w-5 text-[#0080ff]" />
-            <h2 className="text-sm font-semibold uppercase tracking-wider text-text-primary">Component Health</h2>
+            <h2 className="text-sm font-semibold uppercase tracking-wider">Component Health</h2>
           </div>
           <div className="grid grid-cols-2 gap-3">
             {Object.entries(status.health.components).length === 0 ? (
@@ -195,7 +194,7 @@ export default function Dashboard() {
                 >
                   <div className="flex items-center gap-2 mb-1">
                     <span className={`inline-block h-2 w-2 rounded-full ${healthColor(comp.status)} glow-dot`} />
-                    <span className="text-sm font-medium capitalize truncate text-text-primary">
+                    <span className="text-sm font-medium capitalize truncate">
                       {name}
                     </span>
                   </div>

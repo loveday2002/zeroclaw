@@ -110,7 +110,7 @@ export default function Memory() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Brain className="h-5 w-5 text-accent-blue" />
-          <h2 className="text-sm font-semibold uppercase tracking-wider text-text-primary">
+          <h2 className="text-sm font-semibold uppercase tracking-wider">
             Memory ({entries.length})
           </h2>
         </div>
@@ -171,7 +171,7 @@ export default function Memory() {
         <div className="fixed inset-0 modal-backdrop flex items-center justify-center z-50">
           <div className="glass-card p-6 w-full max-w-md mx-4 animate-fade-in-scale">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-text-primary">Add Memory</h3>
+              <h3 className="text-lg font-semibold">Add Memory</h3>
               <button
                 onClick={() => {
                   setShowForm(false);
@@ -288,7 +288,7 @@ export default function Memory() {
                   key={entry.id}
                   className="transition-colors duration-200 border-b-[var(--border-subtle)] hover:bg-[rgba(0,128,255,0.04)]"
                 >
-                  <td className="px-4 py-3 font-mono text-xs font-medium text-text-primary">
+                  <td className="px-4 py-3 font-mono text-xs font-medium">
                     {entry.key}
                   </td>
                   <td className="px-4 py-3 max-w-75 text-sm text-text-secondary">

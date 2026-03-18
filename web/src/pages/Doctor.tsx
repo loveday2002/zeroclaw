@@ -126,14 +126,14 @@ export default function Doctor() {
           <div className="glass-card flex items-center gap-4 p-4 animate-slide-in-up">
             <div className="flex items-center gap-2">
               <CheckCircle className="h-5 w-5 text-emerald-400" />
-              <span className="text-sm text-text-primary font-medium">
+              <span className="text-sm font-medium">
                 {okCount} <span className="text-slate-500 font-normal">ok</span>
               </span>
             </div>
             <div className="w-px h-5 bg-slate-700" />
             <div className="flex items-center gap-2">
               <AlertTriangle className="h-5 w-5 text-amber-400" />
-              <span className="text-sm text-text-primary font-medium">
+              <span className="text-sm font-medium">
                 {warnCount}{' '}
                 <span className="text-slate-500 font-normal">
                   warning{warnCount !== 1 ? 's' : ''}
@@ -143,7 +143,7 @@ export default function Doctor() {
             <div className="w-px h-5 bg-slate-700" />
             <div className="flex items-center gap-2">
               <XCircle className="h-5 w-5 text-red-500" />
-              <span className="text-sm text-text-primary font-medium">
+              <span className="text-sm font-medium">
                 {errorCount}{' '}
                 <span className="text-slate-500 font-normal">
                   error{errorCount !== 1 ? 's' : ''}
@@ -186,7 +186,7 @@ export default function Doctor() {
                     >
                       {severityIcon(result.severity)}
                       <div className="min-w-0">
-                        <p className="text-sm text-text-primary">{result.message}</p>
+                        <p className="text-sm">{result.message}</p>
                         <p className="text-[10px] text-[#334060] mt-0.5 uppercase tracking-wider">
                           {result.severity}
                         </p>
@@ -205,7 +205,7 @@ export default function Doctor() {
           <div className="h-16 w-16 rounded-2xl flex items-center justify-center mb-4 animate-float" style={{ background: 'linear-gradient(135deg, rgba(0,128,255,0.08), rgba(0,128,255,0.03))' }}>
             <Stethoscope className="h-8 w-8 text-blue-500" />
           </div>
-          <p className="text-lg font-semibold text-text-primary mb-1">System Diagnostics</p>
+          <p className="text-lg font-semibold mb-1">System Diagnostics</p>
           <p className="text-sm text-slate-500">
             Click "Run Diagnostics" to check your ZeroClaw installation.
           </p>

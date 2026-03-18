@@ -280,7 +280,7 @@ export default function AgentChat() {
               >
                 <Bot className="h-8 w-8 text-accent-blue" />
               </div>
-              <p className="text-lg font-semibold mb-1 text-text-primary">ZeroClaw Agent</p>
+              <p className="text-lg font-semibold mb-1">ZeroClaw Agent</p>
               <p className="text-sm text-text-muted">Send a message to start a new conversation</p>
             </div>
           )}

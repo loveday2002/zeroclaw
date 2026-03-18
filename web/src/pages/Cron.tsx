@@ -254,7 +254,7 @@ export default function Cron() {
         <div className="fixed inset-0 modal-backdrop flex items-center justify-center z-50">
           <div className="glass-card p-6 w-full max-w-md mx-4 animate-fade-in-scale">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold text-text-primary">Add Cron Job</h3>
+              <h3 className="text-lg font-semibold">Add Cron Job</h3>
               <button
                 onClick={() => {
                   setShowForm(false);
@@ -375,7 +375,7 @@ export default function Cron() {
                         {job.id.slice(0, 8)}
                       </button>
                     </td>
-                    <td className="px-4 py-3 text-text-primary font-medium text-sm">
+                    <td className="px-4 py-3 font-medium text-sm">
                       {job.name ?? '-'}
                     </td>
                     <td className="px-4 py-3 text-slate-400 font-mono text-xs max-w-50 truncate">
