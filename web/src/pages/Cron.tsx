@@ -236,7 +236,7 @@ export default function Cron() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Clock className="h-5 w-5 text-[#0080ff]" />
-          <h2 className="text-sm font-semibold text-text-primary uppercase tracking-wider">
+          <h2 className="text-sm font-semibold  uppercase tracking-wider">
             Scheduled Tasks ({jobs.length})
           </h2>
         </div>
@@ -395,10 +395,9 @@ export default function Cron() {
                     <td className="px-4 py-3">
                       <span
                         className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold border ${job.enabled
-                          ? 'text-emerald-400 border-emerald-500/20'
-                          : 'text-slate-600 border-slate-700'
+                          ? 'text-emerald-400 border-emerald-500/20 bg-emerald-500/5'
+                          : 'text-slate-600 border-slate-700 bg-slate-900/30'
                           }`}
-                        style={{ background: job.enabled ? 'rgba(0,230,138,0.06)' : 'rgba(26,26,62,0.3)' }}
                       >
                         {job.enabled ? 'Enabled' : 'Disabled'}
                       </span>

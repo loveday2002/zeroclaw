@@ -97,7 +97,7 @@ export default function Memory() {
   if (error && entries.length === 0) {
     return (
       <div className="p-6 animate-fade-in">
-        <div className="rounded-xl bg-red-500/8 border-red-500/20 p-4 text-sm" style={{ color: 'var(--status-error)' }}>
+        <div className="rounded-xl bg-red-500/8 border-red-500/20 p-4 text-sm text-status-error">
           Failed to load memory: {error}
         </div>
       </div>
@@ -109,8 +109,8 @@ export default function Memory() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <Brain className="h-5 w-5" style={{ color: 'var(--accent-blue)' }} />
-          <h2 className="text-sm font-semibold uppercase tracking-wider" style={{ color: 'var(--text-primary)' }}>
+          <Brain className="h-5 w-5 text-accent-blue" />
+          <h2 className="text-sm font-semibold uppercase tracking-wider text-text-primary">
             Memory ({entries.length})
           </h2>
         </div>
@@ -126,7 +126,7 @@ export default function Memory() {
       {/* Search and Filter */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" style={{ color: 'var(--text-muted)' }} />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-muted" />
           <input
             type="text"
             value={search}
@@ -137,7 +137,7 @@ export default function Memory() {
           />
         </div>
         <div className="relative">
-          <Filter className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4" style={{ color: 'var(--text-muted)' }} />
+          <Filter className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-text-muted" />
           <select
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
@@ -161,7 +161,7 @@ export default function Memory() {
 
       {/* Error banner (non-fatal) */}
       {error && (
-        <div className="rounded-xl bg-red-500/8 border-red-500/20 p-3 text-sm animate-fade-in" style={{ color: 'var(--status-error)' }}>
+        <div className="rounded-xl bg-red-500/8 border-red-500/20 p-3 text-sm animate-fade-in text-status-error">
           {error}
         </div>
       )}
@@ -171,31 +171,28 @@ export default function Memory() {
         <div className="fixed inset-0 modal-backdrop flex items-center justify-center z-50">
           <div className="glass-card p-6 w-full max-w-md mx-4 animate-fade-in-scale">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>Add Memory</h3>
+              <h3 className="text-lg font-semibold text-text-primary">Add Memory</h3>
               <button
                 onClick={() => {
                   setShowForm(false);
                   setFormError(null);
                 }}
-                className="transition-colors duration-300"
-                style={{ color: 'var(--text-muted)' }}
-                onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text-secondary)'}
-                onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}
+                className="transition-colors duration-300 text-text-muted hover:text-text-secondary"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
 
             {formError && (
-              <div className="mb-4 rounded-xl bg-red-500/8 border-red-500/20 p-3 text-sm" style={{ color: 'var(--status-error)' }}>
+              <div className="mb-4 rounded-xl bg-red-500/8 border-red-500/20 p-3 text-sm text-status-error">
                 {formError}
               </div>
             )}
 
             <div className="space-y-4">
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: 'var(--text-secondary)' }}>
-                  Key <span style={{ color: 'var(--status-error)' }}>*</span>
+                <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5 text-text-secondary">
+                  Key <span className="text-status-error">*</span>
                 </label>
                 <input
                   type="text"
@@ -206,8 +203,8 @@ export default function Memory() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: 'var(--text-secondary)' }}>
-                  Content <span style={{ color: 'var(--status-error)' }}>*</span>
+                <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5 text-text-secondary">
+                  Content <span className="text-status-error">*</span>
                 </label>
                 <textarea
                   value={formContent}
@@ -218,7 +215,7 @@ export default function Memory() {
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5" style={{ color: 'var(--text-secondary)' }}>
+                <label className="block text-xs font-semibold uppercase tracking-wider mb-1.5 text-text-secondary">
                   Category (optional)
                 </label>
                 <input
@@ -237,8 +234,7 @@ export default function Memory() {
                   setShowForm(false);
                   setFormError(null);
                 }}
-                className="px-4 py-2 text-sm font-medium transition-all duration-300 border border-slate-700 rounded-xl hover:bg-blue-500/3"
-                style={{ color: 'var(--text-secondary)' }}
+                className="px-4 py-2 text-sm font-medium transition-all duration-300 border border-slate-700 rounded-xl hover:bg-blue-500/3 text-text-secondary"
               >
                 Cancel
               </button>
@@ -261,27 +257,27 @@ export default function Memory() {
         </div>
       ) : entries.length === 0 ? (
         <div className="card p-8 text-center">
-          <Brain className="h-10 w-10 mx-auto mb-3" style={{ color: 'var(--text-muted)' }} />
-          <p className="text-sm" style={{ color: 'var(--text-secondary)' }}>No memory entries found.</p>
+          <Brain className="h-10 w-10 mx-auto mb-3 text-text-muted" />
+          <p className="text-sm text-text-secondary">No memory entries found.</p>
         </div>
       ) : (
         <div className="card overflow-x-auto">
           <table className="w-full">
             <thead>
-              <tr className="border-b" style={{ borderColor: 'rgba(0, 128, 255, 0.1)' }}>
-                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
+              <tr className="border-b border-[rgba(0,128,255,0.1)]">
+                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-text-muted">
                   Key
                 </th>
-                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
+                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-text-muted">
                   Content
                 </th>
-                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
+                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-text-muted">
                   Category
                 </th>
-                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
+                <th className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wider text-text-muted">
                   Timestamp
                 </th>
-                <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-muted)' }}>
+                <th className="text-right px-4 py-3 text-xs font-semibold uppercase tracking-wider text-text-muted">
                   Actions
                 </th>
               </tr>
@@ -290,57 +286,39 @@ export default function Memory() {
               {entries.map((entry) => (
                 <tr
                   key={entry.id}
-                  className="transition-colors duration-200"
-                  style={{ borderBottom: `1px solid var(--border-subtle)` }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = 'rgba(0, 128, 255, 0.04)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = 'transparent';
-                  }}
+                  className="transition-colors duration-200 border-b-[var(--border-subtle)] hover:bg-[rgba(0,128,255,0.04)]"
                 >
-                  <td className="px-4 py-3 font-mono text-xs font-medium" style={{ color: 'var(--text-primary)' }}>
+                  <td className="px-4 py-3 font-mono text-xs font-medium text-text-primary">
                     {entry.key}
                   </td>
-                  <td className="px-4 py-3 max-w-75 text-sm" style={{ color: 'var(--text-secondary)' }}>
+                  <td className="px-4 py-3 max-w-75 text-sm text-text-secondary">
                     <span title={entry.content}>
                       {truncate(entry.content, 80)}
                     </span>
                   </td>
                   <td className="px-4 py-3">
                     <span
-                      className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold capitalize border"
-                      style={{
-                        borderColor: 'var(--border-default)',
-                        color: 'var(--text-secondary)',
-                        background: 'rgba(0, 128, 255, 0.06)',
-                      }}
+                      className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold capitalize border border-[var(--border-default)] text-text-secondary bg-[rgba(0,128,255,0.06)]"
                     >
                       {entry.category}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-xs whitespace-nowrap" style={{ color: 'var(--text-muted)' }}>
+                  <td className="px-4 py-3 text-xs whitespace-nowrap text-text-muted">
                     {formatDate(entry.timestamp)}
                   </td>
                   <td className="px-4 py-3 text-right">
                     {confirmDelete === entry.key ? (
                       <div className="flex items-center justify-end gap-2 animate-fade-in">
-                        <span className="text-xs" style={{ color: 'var(--status-error)' }}>Delete?</span>
+                        <span className="text-xs text-status-error">Delete?</span>
                         <button
                           onClick={() => handleDelete(entry.key)}
-                          className="text-xs font-medium transition-colors"
-                          style={{ color: 'var(--status-error)' }}
-                          onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-status-error-hover, #ff6677)'}
-                          onMouseLeave={(e) => e.currentTarget.style.color = 'var(--status-error)'}
+                          className="text-xs font-medium transition-colors text-status-error hover:[color:var(--color-status-error-hover)]"
                         >
                           Yes
                         </button>
                         <button
                           onClick={() => setConfirmDelete(null)}
-                          className="text-xs font-medium transition-colors"
-                          style={{ color: 'var(--text-muted)' }}
-                          onMouseEnter={(e) => e.currentTarget.style.color = 'var(--text-secondary)'}
-                          onMouseLeave={(e) => e.currentTarget.style.color = 'var(--text-muted)'}
+                          className="text-xs font-medium transition-colors text-text-muted hover:text-text-secondary"
                         >
                           No
                         </button>
@@ -348,14 +326,7 @@ export default function Memory() {
                     ) : (
                       <button
                         onClick={() => setConfirmDelete(entry.key)}
-                        className="transition-all duration-300"
-                        style={{ color: 'var(--text-muted)' }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.color = 'var(--status-error)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.color = 'var(--text-muted)';
-                        }}
+                        className="transition-all duration-300 text-text-muted hover:text-status-error"
                       >
                         <Trash2 className="h-4 w-4" />
                       </button>

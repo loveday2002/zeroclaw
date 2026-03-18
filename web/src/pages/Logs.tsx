@@ -133,10 +133,10 @@ export default function Logs() {
   return (
     <div className="flex flex-col h-[calc(100vh-3.5rem)]">
       {/* Toolbar */}
-      <div className="flex items-center justify-between px-6 py-3 border-b border-border-default/40 animate-fade-in" style={{ background: 'var(--bg-secondary)' }}>
+      <div className="flex items-center justify-between px-6 py-3 border-b border-border-default/40 animate-fade-in bg-[var(--bg-secondary)]">
         <div className="flex items-center gap-3">
           <Activity className="h-5 w-5 text-[#0080ff]" />
-          <h2 className="text-sm font-semibold text-text-primary uppercase tracking-wider">Live Logs</h2>
+          <h2 className="text-sm font-semibold  uppercase tracking-wider">Live Logs</h2>
           <div className="flex items-center gap-2 ml-2">
             <span
               className={`inline-block h-1.5 w-1.5 rounded-full glow-dot ${connected ? 'text-emerald-400 bg-emerald-400' : 'text-red-500 bg-red-500'
@@ -191,7 +191,7 @@ export default function Logs() {
 
       {/* Event type filters */}
       {allTypes.length > 0 && (
-        <div className="flex items-center gap-2 px-6 py-2 border-b border-border-default/30 overflow-x-auto" style={{ background: 'var(--bg-input)' }}>
+        <div className="flex items-center gap-2 px-6 py-2 border-b border-border-default/30 overflow-x-auto bg-[var(--bg-input)]">
           <Filter className="h-3.5 w-3.5 text-slate-600 shrink-0" />
           <span className="text-[10px] text-slate-600 shrink-0 uppercase tracking-wider">Filter:</span>
           {allTypes.map((type) => (

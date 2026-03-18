@@ -59,7 +59,7 @@ export default function Config() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Settings className="h-5 w-5 text-[#0080ff]" />
-          <h2 className="text-sm font-semibold text-text-primary uppercase tracking-wider">Configuration</h2>
+          <h2 className="text-sm font-semibold  uppercase tracking-wider">Configuration</h2>
         </div>
         <button
           onClick={handleSave}
@@ -72,7 +72,7 @@ export default function Config() {
       </div>
 
       {/* Sensitive fields note */}
-      <div className="flex items-start gap-3 rounded-xl p-4 border border-status-warning/20" style={{ background: 'rgba(255,170,0,0.05)' }}>
+      <div className="flex items-start gap-3 rounded-xl p-4 border border-status-warning/20 bg-[rgba(255,170,0,0.05)]">
         <ShieldAlert className="h-5 w-5 text-status-warning shrink-0 mt-0.5" />
         <div>
           <p className="text-sm text-status-warning font-medium">
@@ -87,7 +87,7 @@ export default function Config() {
 
       {/* Success message */}
       {success && (
-        <div className="flex items-center gap-2 rounded-xl p-3 border border-status-success/30 animate-fade-in" style={{ background: 'rgba(0,230,138,0.06)' }}>
+        <div className="flex items-center gap-2 rounded-xl p-3 border border-status-success/30 animate-fade-in bg-[rgba(0,230,138,0.06)]">
           <CheckCircle className="h-4 w-4 text-[#00e68a] shrink-0" />
           <span className="text-sm text-[#00e68a]">{success}</span>
         </div>
@@ -95,7 +95,7 @@ export default function Config() {
 
       {/* Error message */}
       {error && (
-        <div className="flex items-center gap-2 rounded-xl p-3 border border-status-error/30 animate-fade-in" style={{ background: 'rgba(255,68,102,0.06)' }}>
+        <div className="flex items-center gap-2 rounded-xl p-3 border border-status-error/30 animate-fade-in bg-[rgba(255,68,102,0.06)]">
           <AlertTriangle className="h-4 w-4 text-status-error shrink-0" />
           <span className="text-sm text-status-error">{error}</span>
         </div>
@@ -103,7 +103,7 @@ export default function Config() {
 
       {/* Config Editor */}
       <div className="glass-card overflow-hidden">
-        <div className="flex items-center justify-between px-4 py-2.5 border-b border-border-default" style={{ background: 'rgba(0,128,255,0.03)' }}>
+        <div className="flex items-center justify-between px-4 py-2.5 border-b border-border-default bg-[rgba(0,128,255,0.03)]">
           <span className="text-[10px] text-text-muted font-semibold uppercase tracking-wider">
             TOML Configuration
           </span>
@@ -115,8 +115,7 @@ export default function Config() {
           value={config}
           onChange={(e) => setConfig(e.target.value)}
           spellCheck={false}
-          className="w-full min-h-125 text-text-secondary font-mono text-sm p-4 resize-y focus:outline-none focus:ring-2 focus:ring-glow-blue focus:ring-inset"
-          style={{ background: 'var(--bg-input)', tabSize: 4 }}
+          className="w-full min-h-125 text-text-secondary font-mono text-sm p-4 resize-y focus:outline-none focus:ring-2 focus:ring-glow-blue focus:ring-inset bg-[var(--bg-input)] tab-[4]"
         />
       </div>
     </div>

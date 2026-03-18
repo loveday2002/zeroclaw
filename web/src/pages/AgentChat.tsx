@@ -243,12 +243,11 @@ export default function AgentChat() {
       {/* Main chat area */}
       <div className="flex flex-col flex-1 min-w-0">
         {/* Top bar: sidebar toggle + session title + theme toggle */}
-        <div className="flex items-center justify-between gap-2 px-3 py-1.5 border-b" style={{ borderColor: 'var(--border-default)' }}>
+        <div className="flex items-center justify-between gap-2 px-3 py-1.5 border-b border-[var(--border-default)]">
           <div className="flex items-center gap-2">
             <button
               onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-1.5 rounded-lg transition-all"
-              style={{ color: 'var(--text-muted)', background: 'transparent' }}
+              className="p-1.5 rounded-lg transition-all text-text-muted bg-transparent"
             >
               {sidebarOpen ? (
                 <PanelLeftClose className="h-4 w-4" />
@@ -257,7 +256,7 @@ export default function AgentChat() {
               )}
             </button>
             {activeSession && (
-              <span className="text-xs truncate" style={{ color: 'var(--text-muted)' }}>{activeSession.title}</span>
+              <span className="text-xs truncate text-text-muted">{activeSession.title}</span>
             )}
           </div>
         </div>
@@ -279,18 +278,18 @@ export default function AgentChat() {
                 className="h-16 w-16 rounded-2xl flex items-center justify-center mb-4 animate-float"
                 style={{ background: isDark ? 'linear-gradient(135deg, rgba(0,128,255,0.08), rgba(0,128,255,0.03))' : 'linear-gradient(135deg, rgba(0,128,255,0.1), rgba(0,128,255,0.05))' }}
               >
-                <Bot className="h-8 w-8" style={{ color: 'var(--accent-blue)' }} />
+                <Bot className="h-8 w-8 text-accent-blue" />
               </div>
-              <p className="text-lg font-semibold mb-1" style={{ color: 'var(--text-primary)' }}>ZeroClaw Agent</p>
-              <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Send a message to start a new conversation</p>
+              <p className="text-lg font-semibold mb-1 text-text-primary">ZeroClaw Agent</p>
+              <p className="text-sm text-text-muted">Send a message to start a new conversation</p>
             </div>
           )}
 
           {/* Active session with no messages yet (edge case during creation) */}
           {activeSession && currentMessages.length === 0 && (
             <div className="flex flex-col items-center justify-center h-full animate-fade-in">
-              <Bot className="h-8 w-8 mb-2" style={{ color: 'var(--accent-blue)' }} />
-              <p className="text-sm" style={{ color: 'var(--text-muted)' }}>Send a message to start the conversation</p>
+              <Bot className="h-8 w-8 mb-2 text-accent-blue" />
+              <p className="text-sm text-text-muted">Send a message to start the conversation</p>
             </div>
           )}
 
@@ -318,7 +317,7 @@ export default function AgentChat() {
                 {msg.role === 'user' ? (
                   <User className="h-4 w-4" style={{ color: msg.role === 'user' ? '#fff' : 'var(--accent-blue)' }} />
                 ) : (
-                  <Bot className="h-4 w-4" style={{ color: 'var(--accent-blue)' }} />
+                  <Bot className="h-4 w-4 text-accent-blue" />
                 )}
               </div>
               <div className="relative max-w-[75%]">
@@ -355,7 +354,7 @@ export default function AgentChat() {
                   }}
                 >
                   {copiedId === msg.id ? (
-                    <Check className="h-3 w-3" style={{ color: 'var(--status-success)' }} />
+                    <Check className="h-3 w-3 text-status-success" />
                   ) : (
                     <Copy className="h-3 w-3" />
                   )}
@@ -375,7 +374,7 @@ export default function AgentChat() {
                     : 'linear-gradient(135deg, rgba(200,200,220,0.3), rgba(180,180,200,0.2))',
                 }}
               >
-                <Bot className="h-4 w-4" style={{ color: 'var(--accent-blue)' }} />
+                <Bot className="h-4 w-4 text-accent-blue" />
               </div>
               <div
                 className="rounded-2xl px-4 py-3"
@@ -399,7 +398,7 @@ export default function AgentChat() {
         </div>
 
         {/* Input area */}
-        <div className="border-t p-4" style={{ borderColor: 'var(--border-default)', background: isDark ? 'linear-gradient(180deg, rgba(8,8,24,0.9), rgba(5,5,16,0.95))' : 'var(--bg-secondary)' }}>
+        <div className="border-t border-[var(--border-default)] p-4" style={{ background: isDark ? 'linear-gradient(180deg, rgba(8,8,24,0.9), rgba(5,5,16,0.95))' : 'var(--bg-secondary)' }}>
           <div className="flex items-end gap-3 max-w-4xl mx-auto">
             <div className="flex-1">
               <textarea
@@ -427,7 +426,7 @@ export default function AgentChat() {
               className={`inline-block h-1.5 w-1.5 rounded-full glow-dot ${connected ? 'text-emerald-400 bg-emerald-400' : 'text-red-500 bg-red-500'
                 }`}
             />
-            <span className="text-[10px]" style={{ color: 'var(--text-muted)' }}>
+            <span className="text-[10px] text-text-muted">
               {connected ? 'Connected' : 'Disconnected'}
             </span>
           </div>

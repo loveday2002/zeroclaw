@@ -76,7 +76,7 @@ export default function Tools() {
       <div>
         <div className="flex items-center gap-2 mb-4">
           <Wrench className="h-5 w-5 text-blue-500" />
-          <h2 className="text-sm font-semibold text-text-primary uppercase tracking-wider">
+          <h2 className="text-sm font-semibold  uppercase tracking-wider">
             Agent Tools ({filtered.length})
           </h2>
         </div>
@@ -121,7 +121,7 @@ export default function Tools() {
                       <p className="text-[10px] text-slate-600 mb-2 font-semibold uppercase tracking-wider">
                         Parameter Schema
                       </p>
-                      <pre className="text-xs text-text-secondary rounded-xl p-3 overflow-x-auto max-h-64 overflow-y-auto" style={{ background: 'var(--bg-input)' }}>
+                      <pre className="text-xs text-text-secondary rounded-xl p-3 overflow-x-auto max-h-64 overflow-y-auto bg-[var(--bg-input)]">
                         {JSON.stringify(tool.parameters, null, 2)}
                       </pre>
                     </div>
@@ -138,7 +138,7 @@ export default function Tools() {
         <div className="animate-slide-in-up" style={{ animationDelay: '200ms' }}>
           <div className="flex items-center gap-2 mb-4">
             <Terminal className="h-5 w-5 text-emerald-400" />
-            <h2 className="text-sm font-semibold text-text-primary uppercase tracking-wider">
+            <h2 className="text-sm font-semibold  uppercase tracking-wider">
               CLI Tools ({filteredCli.length})
             </h2>
           </div>
@@ -166,7 +166,7 @@ export default function Tools() {
                       {tool.version ?? '-'}
                     </td>
                     <td className="px-4 py-3">
-                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold capitalize border border-slate-700 text-slate-400" style={{ background: 'var(--bg-input)' }}>
+                      <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-[10px] font-semibold capitalize border border-slate-700 text-slate-400 bg-[var(--bg-input)]">
                         {tool.category}
                       </span>
                     </td>

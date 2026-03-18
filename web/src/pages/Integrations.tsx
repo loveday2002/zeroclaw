@@ -83,7 +83,7 @@ export default function Integrations() {
       {/* Header */}
       <div className="flex items-center gap-2">
         <Puzzle className="h-5 w-5 text-[#0080ff]" />
-        <h2 className="text-sm font-semibold text-text-primary uppercase tracking-wider">
+        <h2 className="text-sm font-semibold  uppercase tracking-wider">
           Integrations ({integrations.length})
         </h2>
       </div>
@@ -95,10 +95,9 @@ export default function Integrations() {
             key={cat}
             onClick={() => setActiveCategory(cat)}
             className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all duration-300 capitalize ${activeCategory === cat
-              ? 'text-text-primary shadow-[0_0_15px_rgba(0,128,255,0.2)]'
+              ? 'text-text-primary shadow-[0_0_15px_rgba(0,128,255,0.2)] bg-[linear-gradient(135deg,#0080ff,#0066cc)]'
               : 'text-text-muted border border-border-default hover:text-text-primary hover:border-glow-blue'
               }`}
-            style={activeCategory === cat ? { background: 'linear-gradient(135deg, #0080ff, #0066cc)' } : {}}
           >
             {cat}
           </button>

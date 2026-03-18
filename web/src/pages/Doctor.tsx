@@ -80,7 +80,7 @@ export default function Doctor() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Stethoscope className="h-5 w-5 text-[#0080ff]" />
-          <h2 className="text-sm font-semibold text-text-primary uppercase tracking-wider">Diagnostics</h2>
+          <h2 className="text-sm font-semibold  uppercase tracking-wider">Diagnostics</h2>
         </div>
         <button
           onClick={handleRun}
