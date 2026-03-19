@@ -13,7 +13,7 @@ import {
   clearToken as removeToken,
   isAuthenticated as checkAuth,
 } from '../lib/auth';
-import { pair as apiPair } from '../lib/api';
+import { pair as apiPair, getPublicHealth } from '../lib/api';
 
 // ---------------------------------------------------------------------------
 // Context shape
@@ -47,11 +47,31 @@ export interface AuthProviderProps {
 export function AuthProvider({ children }: AuthProviderProps) {
   const [token, setTokenState] = useState<string | null>(readToken);
   const [authenticated, setAuthenticated] = useState<boolean>(checkAuth);
-  const [requiresPairing] = useState<boolean>(false); // TEST MODE: skip pairing    
-  const [loading] = useState<boolean>(false); // TEST MODE: no loading delay
+  const [requiresPairing, setRequiresPairing] = useState<boolean>(true);
+  const [loading, setLoading] = useState<boolean>(!checkAuth());
 
   // On mount: check if server requires pairing at all
-  // Disabled for testing - pairing is skipped
+  useEffect(() => {
+    if (checkAuth()) return; // already have a token, no need to check
+    let cancelled = false;
+    getPublicHealth()
+      .then((health) => {
+        if (cancelled) return;
+        if (!health.require_pairing) {
+          setRequiresPairing(false);
+          setAuthenticated(true);
+        }
+      })
+      .catch(() => {
+        // health endpoint unreachable — fall back to showing pairing dialog
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   // Keep state in sync if localStorage is changed in another tab
   useEffect(() => {
