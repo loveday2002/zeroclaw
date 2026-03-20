@@ -40,3 +40,24 @@ export function isAuthenticated(): boolean {
   const token = getToken();
   return token !== null && token.length > 0;
 }
+
+/**
+ * 从 URL 参数中读取 token 并存储。
+ * 用于外部系统跳转时自动传入认证信息。
+ */
+export function consumeTokenFromURL(): string | null {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get('token');
+    if (token && token.length > 0) {
+      setToken(token);
+      const url = new URL(window.location.href);
+      url.searchParams.delete('token');
+      window.history.replaceState({}, '', url.toString());
+      return token;
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}

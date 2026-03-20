@@ -61,7 +61,6 @@ export class WebSocketClient {
 
   /** Open the WebSocket connection. */
   connect(): void {
-    this.intentionallyClosed = false;
     this.clearReconnectTimer();
 
     const token = getToken();
@@ -69,7 +68,10 @@ export class WebSocketClient {
     const params = new URLSearchParams();
     if (token) params.set('token', token);
     params.set('session_id', sessionId);
-    const url = `${this.baseUrl}/ws/chat?${params.toString()}`;
+    
+    // 从全局变量读取 basename，Nginx 注入时会设置这个值
+    const base = (window as any).__CLAW_BASE__ || '';
+    const url = `${this.baseUrl}${base}/ws/chat?${params.toString()}`;
 
     const protocols: string[] = ['zeroclaw.v1'];
     if (token) protocols.push(`bearer.${token}`);

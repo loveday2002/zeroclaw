@@ -12,6 +12,7 @@ import {
   setToken as writeToken,
   clearToken as removeToken,
   isAuthenticated as checkAuth,
+  consumeTokenFromURL,           // ← 新增
 } from '../lib/auth';
 import { pair as apiPair, getPublicHealth } from '../lib/api';
 
@@ -45,6 +46,13 @@ export interface AuthProviderProps {
 }
 
 export function AuthProvider({ children }: AuthProviderProps) {
+  // ↓↓↓ 新增：在第一次渲染前同步消费 URL 中的 token ↓↓↓
+  const [_ready] = useState(() => {
+    consumeTokenFromURL();
+    return true;
+  });
+  // ↑↑↑ 新增 ↑↑↑
+
   const [token, setTokenState] = useState<string | null>(readToken);
   const [authenticated, setAuthenticated] = useState<boolean>(checkAuth);
   const [requiresPairing, setRequiresPairing] = useState<boolean>(true);

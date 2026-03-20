@@ -29,13 +29,13 @@ function healthColor(status: string): string {
   switch (status.toLowerCase()) {
     case 'ok':
     case 'healthy':
-      return 'bg-[#00e68a]';
+      return 'bg-emerald-400';
     case 'warn':
     case 'warning':
     case 'degraded':
-      return 'bg-[#ffaa00]';
+      return 'bg-amber-400';
     default:
-      return 'bg-[#ff4466]';
+      return 'bg-red-500';
   }
 }
 
@@ -43,13 +43,13 @@ function healthBorder(status: string): string {
   switch (status.toLowerCase()) {
     case 'ok':
     case 'healthy':
-      return 'border-[#00e68a30]';
+      return 'border-emerald-500/20';
     case 'warn':
     case 'warning':
     case 'degraded':
-      return 'border-[#ffaa0030]';
+      return 'border-amber-500/20';
     default:
-      return 'border-[#ff446630]';
+      return 'border-red-500/20';
   }
 }
 
@@ -80,7 +80,7 @@ export default function Dashboard() {
   if (!status || !cost) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="h-8 w-8 border-2 border-[#0080ff30] border-t-[#0080ff] rounded-full animate-spin" />
+        <div className="h-8 w-8 border-2 border-blue-500/20 border-t-blue-500 rounded-full animate-spin" />
       </div>
     );
   }
@@ -99,13 +99,13 @@ export default function Dashboard() {
         ].map(({ icon: Icon, color, bg, label, value, sub }) => (
           <div key={label} className="glass-card p-5 animate-slide-in-up">
             <div className="flex items-center gap-3 mb-3">
-              <div className="p-2 rounded-xl" style={{ background: bg }}>
+              <div className={`p-2 rounded-xl ${bg}`}>
                 <Icon className="h-5 w-5" style={{ color }} />
               </div>
-              <span className="text-xs text-[#556080] uppercase tracking-wider font-medium">{label}</span>
+              <span className="text-xs uppercase tracking-wider font-medium text-text-muted">{label}</span>
             </div>
-            <p className="text-lg font-semibold text-white truncate capitalize">{value}</p>
-            <p className="text-sm text-[#556080] truncate">{sub}</p>
+            <p className="text-lg font-semibold truncate capitalize">{value}</p>
+            <p className="text-sm truncate text-text-muted">{sub}</p>
           </div>
         ))}
       </div>
@@ -125,10 +125,10 @@ export default function Dashboard() {
             ].map(({ label, value, color }) => (
               <div key={label}>
                 <div className="flex justify-between text-sm mb-1.5">
-                  <span className="text-[#556080]">{label}</span>
-                  <span className="text-white font-medium font-mono">{formatUSD(value)}</span>
+                  <span className="text-text-muted">{label}</span>
+                  <span className="font-medium font-mono">{formatUSD(value)}</span>
                 </div>
-                <div className="w-full h-1.5 bg-[#0a0a18] rounded-full overflow-hidden">
+                <div className="w-full h-1.5 rounded-full overflow-hidden bg-[var(--bg-input)]">
                   <div
                     className="h-full rounded-full progress-bar-animated transition-all duration-700 ease-out"
                     style={{ width: `${Math.max((value / maxCost) * 100, 2)}%`, background: color }}
@@ -160,15 +160,13 @@ export default function Dashboard() {
               Object.entries(status.channels).map(([name, active]) => (
                 <div
                   key={name}
-                  className="flex items-center justify-between py-2.5 px-3 rounded-xl transition-all duration-300 hover:bg-[#0080ff08]"
-                  style={{ background: 'rgba(10, 10, 26, 0.5)' }}
+                  className="flex items-center justify-between py-2.5 px-3 rounded-xl transition-all duration-300 hover:opacity-80 bg-[var(--bg-input)]"
                 >
-                  <span className="text-sm text-white capitalize font-medium">{name}</span>
+                  <span className="text-sm capitalize font-medium">{name}</span>
                   <div className="flex items-center gap-2">
                     <span
-                      className={`inline-block h-2 w-2 rounded-full glow-dot ${
-                        active ? 'text-[#00e68a] bg-[#00e68a]' : 'text-[#334060] bg-[#334060]'
-                      }`}
+                      className={`inline-block h-2 w-2 rounded-full glow-dot ${active ? 'text-emerald-400 bg-emerald-400' : 'text-slate-600 bg-slate-600'
+                        }`}
                     />
                     <span className="text-xs text-[#556080]">
                       {active ? t('dashboard.active') : t('dashboard.inactive')}
@@ -193,16 +191,15 @@ export default function Dashboard() {
               Object.entries(status.health.components).map(([name, comp]) => (
                 <div
                   key={name}
-                  className={`rounded-xl p-3 border ${healthBorder(comp.status)} transition-all duration-300 hover:scale-[1.02]`}
-                  style={{ background: 'rgba(10, 10, 26, 0.5)' }}
+                  className={`rounded-xl p-3 border ${healthBorder(comp.status)} transition-all duration-300 hover:scale-[1.02] bg-[var(--bg-input)]`}
                 >
                   <div className="flex items-center gap-2 mb-1">
                     <span className={`inline-block h-2 w-2 rounded-full ${healthColor(comp.status)} glow-dot`} />
-                    <span className="text-sm font-medium text-white capitalize truncate">
+                    <span className="text-sm font-medium capitalize truncate">
                       {name}
                     </span>
                   </div>
-                  <p className="text-xs text-[#556080] capitalize">{comp.status}</p>
+                  <p className="text-xs capitalize text-text-muted">{comp.status}</p>
                   {comp.restart_count > 0 && (
                     <p className="text-xs text-[#ffaa00] mt-1">
                       {t('dashboard.restarts')}: {comp.restart_count}
